@@ -1,4 +1,4 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
 

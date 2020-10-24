@@ -1,6 +1,7 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
+import org.handoitasdf.pixivj.util.JsonUtils;
 
 public class ErrorInfo {
   @SerializedName("message")
@@ -22,5 +23,10 @@ public class ErrorInfo {
 
   public void setCode(int code) {
     this.code = code;
+  }
+
+  @Override
+  public String toString() {
+    return JsonUtils.GSON.toJson(this);
   }
 }

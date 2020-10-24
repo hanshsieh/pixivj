@@ -1,4 +1,4 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.model;
 
 public class Credential {
   public static final String CLIENT_ID_MOBILE = "MOBrBDS8blbauoSck0ZfDbtuzpyT";

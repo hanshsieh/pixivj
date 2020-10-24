@@ -1,6 +1,7 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
+import org.handoitasdf.pixivj.util.JsonUtils;
 
 import java.util.Objects;
 
@@ -73,23 +74,6 @@ public class ProfileImageUrls {
 
   @Override
   public String toString() {
-
-    return "class FullUserProfileImageUrls {\n" +
-        "    px16x16: " + toIndentedString(px16x16) + "\n" +
-        "    px50x50: " + toIndentedString(px50x50) + "\n" +
-        "    px170x170: " + toIndentedString(px170x170) + "\n" +
-        "}";
+    return JsonUtils.GSON.toJson(this);
   }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
-
 }
