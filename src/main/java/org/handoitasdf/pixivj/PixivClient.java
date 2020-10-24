@@ -1,28 +1,32 @@
 package org.handoitasdf.pixivj;
 
-import com.google.gson.Gson;
 import okhttp3.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.units.qual.C;
+import org.handoitasdf.pixivj.exception.AuthException;
+import org.handoitasdf.pixivj.exception.PixivException;
+import org.handoitasdf.pixivj.model.*;
+import org.handoitasdf.pixivj.token.LazyTokenProvider;
+import org.handoitasdf.pixivj.token.TokenProvider;
+import org.handoitasdf.pixivj.util.HexUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-public class PixivClient {
-
+public class PixivClient implements Closeable {
   public static class Builder {
     public static final String USER_AGENT_ANDROID = "PixivAndroidApp/5.0.64 (Android 6.0)";
     public static final String USER_AGENT_IOS = "PixivIOSApp/7.6.2 (iOS 12.0.1; iPhone8,2)";
     private String authBaseUrl = "https://oauth.secure.pixiv.net";
-    private String apiBaseUrl = "https://app-api.pixiv.net/v1";
+    private String apiBaseUrl = "https://app-api.pixiv.net";
     private String userAgent = USER_AGENT_ANDROID;
+    private TokenProvider tokenProvider = new LazyTokenProvider();
 
     @NonNull
     public Builder setAuthBaseUrl(@NonNull String authBaseUrl) {
@@ -43,33 +47,67 @@ public class PixivClient {
     }
 
     @NonNull
+    public Builder setTokenProvider(@NonNull TokenProvider tokenProvider) {
+      this.tokenProvider = tokenProvider;
+      return this;
+    }
+
+    @NonNull
     public PixivClient build() {
       return new PixivClient(this);
     }
   }
-
-  private static final MediaType FORM_URL_ENCODED = MediaType.get("application/x-www-form-urlencoded;charset=utf-8");
-  private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+  private static final Logger logger = LoggerFactory.getLogger(PixivClient.class);
   private final HttpUrl apiBaseUrl;
   private final HttpUrl authBaseUrl;
   private final String userAgent;
   private final OkHttpClient httpClient;
-  private final Gson gson;
+  private final TokenProvider tokenProvider;
+  private final QueryParamConverter queryParamConverter;
+  private final AuthRequestSender authRequestSender;
+  private final ApiRequestSender apiRequestSender;
 
   private PixivClient(@NonNull Builder builder) {
-    this.gson = new Gson();
     this.apiBaseUrl = HttpUrl.parse(builder.apiBaseUrl);
     this.authBaseUrl = HttpUrl.parse(builder.authBaseUrl);
     this.userAgent = builder.userAgent;
+    this.tokenProvider = builder.tokenProvider;
     this.httpClient = new OkHttpClient.Builder()
       .followRedirects(false)
       .followSslRedirects(false)
       .build();
+    this.queryParamConverter = new QueryParamConverter();
+    this.tokenProvider.setClient(this);
+    this.authRequestSender = new AuthRequestSender(httpClient);
+    this.apiRequestSender = new ApiRequestSender(httpClient);
   }
 
-  @NonNull
-  public AuthTokens getAuthTokens(@NonNull Credential credential) throws AuthException, IOException {
+  /**
+   * Uses the given credential to authenticate with the server, saves the tokens obtained for future API calls.
+   * @param credential Credential for authentication.
+   * @return Authentication result.
+   * @throws AuthException Authentication error.
+   * @throws IOException IO error.
+   */
+  public AuthResult login(@NonNull Credential credential) throws AuthException, IOException {
+    AuthResult result = authenticate(credential);
+    tokenProvider.setTokens(
+        result.getAccessToken(),
+        result.getRefreshToken(),
+        result.getExpiresIn());
+    return result;
+  }
 
+  /**
+   * Uses the given credential to authenticate with the server.
+   * Different from {@link #login(Credential)}, the tokens obtained won't be saved.
+   * @param credential Credential for authentication.
+   * @return Authentication result.
+   * @throws AuthException Authentication error.
+   * @throws IOException IO error.
+   */
+  @NonNull
+  public AuthResult authenticate(@NonNull Credential credential) throws AuthException, IOException {
     HttpUrl url = authBaseUrl.newBuilder()
         .addEncodedPathSegments("auth/token")
         .build();
@@ -96,19 +134,38 @@ public class PixivClient {
         .header("User-Agent", userAgent)
         .header("X-Client-Time", timeStr)
         .header("X-Client-Hash", clientHash)
-        .method("POST", formBody)
+        .post(formBody)
         .build();
-    try (Response response = httpClient.newCall(request).execute()) {
-      ResponseBody respBody = response.body();
-      assert respBody != null;
-      String respBodyStr = respBody.string();
-      if (!response.isSuccessful()) {
-        AuthError authError = gson.fromJson(respBodyStr, AuthError.class);
-        throw new AuthException(authError);
-      } else {
-        return gson.fromJson(respBodyStr, AuthTokens.class);
-      }
-    }
+    return authRequestSender.send(request, AuthResult.class);
+  }
+
+  @NonNull
+  public RankedIllusts getRankedIllusts(@NonNull RankedIllustsFilter filter) throws PixivException, IOException {
+    return sendQueryRequest("v1/illust/ranking", filter, RankedIllusts.class);
+  }
+
+  @NonNull
+  public RecommendIllusts getRecommendedIllusts(@NonNull RecommendedIllustsFilter filter) throws PixivException, IOException {
+    return sendQueryRequest("v1/illust/recommended", filter, RecommendIllusts.class);
+  }
+
+  private <T, F> T sendQueryRequest(@NonNull String path, @NonNull F filter, Class<T> respType) throws PixivException, IOException {
+    HttpUrl.Builder urlBuilder = apiBaseUrl.newBuilder()
+        .addEncodedPathSegments(path);
+    queryParamConverter.toQueryParams(filter, urlBuilder);
+    HttpUrl url = urlBuilder
+        .build();
+    Request request = createApiReqBuilder()
+        .url(url)
+        .get()
+        .build();
+    return apiRequestSender.send(request, respType);
+  }
+
+  private Request.@NonNull Builder createApiReqBuilder() throws AuthException, IOException {
+    return new Request.Builder()
+        .header("User-Agent", userAgent)
+        .header("Authorization", "Bearer " + tokenProvider.getAccessToken());
   }
 
   @NonNull
@@ -120,5 +177,12 @@ public class PixivClient {
     } catch (NoSuchAlgorithmException ex) {
       throw new RuntimeException(ex);
     }
+  }
+
+  @Override
+  public void close() throws IOException {
+    this.tokenProvider.close();
+    this.httpClient.dispatcher().executorService().shutdown();
+    this.httpClient.connectionPool().evictAll();
   }
 }

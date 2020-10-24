@@ -1,8 +1,8 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.util;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-class HexUtils {
+public class HexUtils {
   private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
   @NonNull
   public static String bytesToHex(byte[] bytes) {

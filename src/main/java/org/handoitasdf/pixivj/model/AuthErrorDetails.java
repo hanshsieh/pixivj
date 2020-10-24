@@ -1,6 +1,7 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
+import org.handoitasdf.pixivj.model.ErrorInfo;
 
 public class AuthErrorDetails {
   @SerializedName("system")

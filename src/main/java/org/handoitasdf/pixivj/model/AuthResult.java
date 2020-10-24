@@ -1,10 +1,11 @@
-package org.handoitasdf.pixivj;
+package org.handoitasdf.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
+import org.handoitasdf.pixivj.util.JsonUtils;
 
 import java.util.Objects;
 
-public class AuthTokens {
+public class AuthResult {
   @SerializedName("access_token")
   private String accessToken = null;
 
@@ -119,14 +120,14 @@ public class AuthTokens {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AuthTokens authTokens = (AuthTokens) o;
-    return Objects.equals(this.accessToken, authTokens.accessToken) &&
-        Objects.equals(this.expiresIn, authTokens.expiresIn) &&
-        Objects.equals(this.tokenType, authTokens.tokenType) &&
-        Objects.equals(this.scope, authTokens.scope) &&
-        Objects.equals(this.refreshToken, authTokens.refreshToken) &&
-        Objects.equals(this.user, authTokens.user) &&
-        Objects.equals(this.deviceToken, authTokens.deviceToken);
+    AuthResult authResult = (AuthResult) o;
+    return Objects.equals(this.accessToken, authResult.accessToken) &&
+        Objects.equals(this.expiresIn, authResult.expiresIn) &&
+        Objects.equals(this.tokenType, authResult.tokenType) &&
+        Objects.equals(this.scope, authResult.scope) &&
+        Objects.equals(this.refreshToken, authResult.refreshToken) &&
+        Objects.equals(this.user, authResult.user) &&
+        Objects.equals(this.deviceToken, authResult.deviceToken);
   }
 
   @Override
@@ -137,26 +138,7 @@ public class AuthTokens {
 
   @Override
   public String toString() {
-    return "class AuthTokens {\n" +
-        "    accessToken: " + toIndentedString(accessToken) + "\n" +
-        "    expiresIn: " + toIndentedString(expiresIn) + "\n" +
-        "    tokenType: " + toIndentedString(tokenType) + "\n" +
-        "    scope: " + toIndentedString(scope) + "\n" +
-        "    refreshToken: " + toIndentedString(refreshToken) + "\n" +
-        "    user: " + toIndentedString(user) + "\n" +
-        "    deviceToken: " + toIndentedString(deviceToken) + "\n" +
-        "}";
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private static String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return JsonUtils.GSON.toJson(this);
   }
 
 }
