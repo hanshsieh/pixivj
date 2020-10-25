@@ -13,7 +13,7 @@ class AuthRequestSender extends RequestSender<AuthException> {
   }
 
   @Override
-  protected AuthException createException(@NonNull String respStr) {
+  protected AuthException createExceptionFromRespBody(@NonNull String respStr) {
     AuthError authError = JsonUtils.GSON.fromJson(respStr, AuthError.class);
     return new AuthException(authError);
   }

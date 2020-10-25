@@ -13,7 +13,7 @@ class ApiRequestSender extends RequestSender<APIException> {
   }
 
   @Override
-  protected APIException createException(@NonNull String respStr) {
+  protected APIException createExceptionFromRespBody(@NonNull String respStr) {
     APIError error = JsonUtils.GSON.fromJson(respStr, APIError.class);
     return new APIException(error);
   }
