@@ -149,6 +149,19 @@ public class PixivClient implements Closeable {
     return sendQueryRequest("v1/illust/recommended", filter, RecommendIllusts.class);
   }
 
+  @NonNull
+  public IllustDetail getIllustDetail(long illustId) throws PixivException, IOException {
+    HttpUrl url = apiBaseUrl.newBuilder()
+        .addEncodedPathSegments("v1/illust/detail")
+        .addQueryParameter("illust_id", String.valueOf(illustId))
+        .build();
+    Request request = createApiReqBuilder()
+        .url(url)
+        .get()
+        .build();
+    return apiRequestSender.send(request, IllustDetail.class);
+  }
+
   private <T, F> T sendQueryRequest(@NonNull String path, @NonNull F filter, Class<T> respType) throws PixivException, IOException {
     HttpUrl.Builder urlBuilder = apiBaseUrl.newBuilder()
         .addEncodedPathSegments(path);
