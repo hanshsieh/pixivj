@@ -4,11 +4,15 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.handoitasdf.pixivj</groupId>
+  <groupId>org.github.hanshsieh</groupId>
   <artifactId>pixivj</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <name>pixivj</name>
+  <description>
+    This library is a Java client for Pixiv, a Japanese online community for artists.
+  </description>
   <url>https://github.com/hanshsieh/pixivj</url>
 
   <properties>
@@ -17,6 +21,29 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <jmockit.version>1.49</jmockit.version>
   </properties>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Hans Hsieh</name>
+      <email>blueskywalk@outlook.com</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/hanshsieh/pixivj.git</connection>
+    <developerConnection>scm:git:ssh://github.com:hanshsieh/pixivj.git</developerConnection>
+    <url>http://github.com/hanshsieh/pixivj</url>
+  </scm>
 
   <dependencies>
     <dependency>
