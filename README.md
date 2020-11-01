@@ -1,8 +1,9 @@
 # PixivJ
-A java client for Pixiv
+A java client for Pixiv.
 
 ![Java CI](https://github.com/hanshsieh/pixivj/workflows/Java%20CI/badge.svg)  
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.hanshsieh/pixivj.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.hanshsieh%22%20AND%20a:%22pixivj%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.hanshsieh/pixivj.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.hanshsieh%22%20AND%20a:%22pixivj%22)  
+[Pixiv API doc](https://hanshsieh.github.io/pixiv-api-doc)
 
 Currently, only a small subset of the APIs are implemented.
 
