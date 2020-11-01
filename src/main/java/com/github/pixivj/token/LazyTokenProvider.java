@@ -12,14 +12,25 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
+/**
+ * A token provider that only refreshes the token when the {@link #getAccessToken()} is being called.
+ * It is only suitable if there's always at least one call of {@link #getAccessToken()} within the given expiry
+ * tolerance. For example, if the expiry tolerance is 10 minutes, then it will try to refresh token when the remaining
+ * lifetime of the access token is less than 10 minutes when {@link #getAccessToken()} is invoked. Therefore, if
+ * {@link #getAccessToken()} is not called for every 10 minutes, it's possible that the access token will expire.
+ */
 public class LazyTokenProvider extends BaseTokenProvider {
-  public static final Duration DEFAULT_EXPIRE_TOLERANCE = Duration.ofMinutes(1);
+  public static final Duration DEFAULT_EXPIRE_TOLERANCE = Duration.ofMinutes(10);
   private static final Logger logger = LoggerFactory.getLogger(LazyTokenProvider.class);
   private final Duration expireTolerance;
   public LazyTokenProvider(@NonNull Duration expireTolerance) {
     Validate.notNull(expireTolerance, "Expire time tolerance cannot be null");
     this.expireTolerance = expireTolerance;
   }
+
+  /**
+   * Creates a new instance with expiry tolerance being 10 minutes.
+   */
   public LazyTokenProvider() {
     this(DEFAULT_EXPIRE_TOLERANCE);
   }
