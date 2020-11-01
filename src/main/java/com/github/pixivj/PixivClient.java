@@ -5,9 +5,10 @@ import okhttp3.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import com.github.pixivj.exception.AuthException;
 import com.github.pixivj.exception.PixivException;
-import com.github.pixivj.token.LazyTokenProvider;
+import com.github.pixivj.token.ThreadedTokenProvider;
 import com.github.pixivj.token.TokenProvider;
 import com.github.pixivj.util.HexUtils;
+import org.checkerframework.com.google.common.io.Closeables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public class PixivClient implements Closeable {
     private String authBaseUrl = "https://oauth.secure.pixiv.net";
     private String apiBaseUrl = "https://app-api.pixiv.net";
     private String userAgent = USER_AGENT_ANDROID;
-    private TokenProvider tokenProvider = new LazyTokenProvider();
+    private TokenProvider tokenProvider = null;
 
     @NonNull
     public Builder setAuthBaseUrl(@NonNull String authBaseUrl) {
@@ -57,7 +58,6 @@ public class PixivClient implements Closeable {
       return new PixivClient(this);
     }
   }
-  private static final Logger logger = LoggerFactory.getLogger(PixivClient.class);
   private final HttpUrl apiBaseUrl;
   private final HttpUrl authBaseUrl;
   private final String userAgent;
@@ -71,7 +71,11 @@ public class PixivClient implements Closeable {
     this.apiBaseUrl = HttpUrl.parse(builder.apiBaseUrl);
     this.authBaseUrl = HttpUrl.parse(builder.authBaseUrl);
     this.userAgent = builder.userAgent;
-    this.tokenProvider = builder.tokenProvider;
+    if (builder.tokenProvider == null) {
+      this.tokenProvider = new ThreadedTokenProvider();
+    } else {
+      this.tokenProvider = builder.tokenProvider;
+    }
     this.httpClient = new OkHttpClient.Builder()
       .followRedirects(false)
       .followSslRedirects(false)

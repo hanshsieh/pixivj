@@ -8,11 +8,14 @@ import com.github.pixivj.exception.AuthException;
 import java.io.IOException;
 import java.time.Instant;
 
+/**
+ * A basic token provider that never refresh the given access token.
+ */
 public class BaseTokenProvider implements TokenProvider {
   protected PixivClient client;
-  protected String accessToken;
-  protected String refreshToken;
-  protected Instant expireTime;
+  protected volatile String accessToken;
+  protected volatile String refreshToken;
+  protected volatile Instant expireTime;
   @Override
   public void setClient(@NonNull PixivClient client) {
     this.client = client;
@@ -32,12 +35,14 @@ public class BaseTokenProvider implements TokenProvider {
 
   @Override
   @NonNull
-  public String getAccessToken() throws AuthException, IOException {
+  public String getAccessToken() throws AuthException, IllegalStateException, IOException {
+    if (accessToken == null) {
+      throw new IllegalStateException("Access token is not set");
+    }
     return accessToken;
   }
 
   @Override
-  public void close() throws IOException {
-
+  public void close() {
   }
 }
