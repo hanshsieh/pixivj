@@ -1,5 +1,8 @@
 package com.github.pixivj.model;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.com.google.common.base.Objects;
+
 public class Credential {
   public static final String CLIENT_ID_MOBILE = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
   public static final String CLIENT_SECRET_MOBILE = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
@@ -130,5 +133,33 @@ public class Credential {
    */
   public void setHashSecret(String hashSecret) {
     this.hashSecret = hashSecret;
+  }
+
+  @Override
+  public boolean equals(@Nullable Object other) {
+    if (other == null || other.getClass() != getClass()) {
+      return false;
+    }
+    Credential that = (Credential) other;
+    return Objects.equal(clientId, that.clientId) &&
+            Objects.equal(clientSecret, that.clientSecret) &&
+            Objects.equal(grantType, that.grantType) &&
+            Objects.equal(username, that.username) &&
+            Objects.equal(password, that.password) &&
+            Objects.equal(refreshToken, that.refreshToken) &&
+            Objects.equal(hashSecret, that.hashSecret);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(
+        clientId,
+        clientSecret,
+        grantType,
+        username,
+        password,
+        refreshToken,
+        hashSecret
+    );
   }
 }
