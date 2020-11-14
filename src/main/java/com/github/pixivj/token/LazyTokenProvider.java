@@ -36,7 +36,7 @@ public class LazyTokenProvider extends BaseTokenProvider {
   }
 
   private boolean isNearExpire() {
-    return System.currentTimeMillis() + expireTolerance.toMillis() >= expireTime.toEpochMilli();
+    return Instant.now().plus(expireTolerance).isAfter(expireTime);
   }
 
   @Override
@@ -44,14 +44,13 @@ public class LazyTokenProvider extends BaseTokenProvider {
   public String getAccessToken() throws AuthException, IOException, IllegalStateException {
     Validate.notNull(expireTime, "Expiry time not set. Are you logged in?");
     if (isNearExpire()) {
+      Validate.notNull(client, "Client is not set");
       logger.debug("Access token is expired, refreshing it");
       Credential credential = new Credential();
       credential.setRefreshToken(this.refreshToken);
       credential.setGrantType(Credential.GRANT_TYPE_REFRESH_TOKEN);
       AuthResult authResult = client.authenticate(credential);
-      this.accessToken = authResult.getAccessToken();
-      this.refreshToken = authResult.getRefreshToken();
-      this.expireTime = Instant.now().plusSeconds(authResult.getExpiresIn());
+      setTokens(authResult.getAccessToken(), authResult.getRefreshToken(), authResult.getExpiresIn());
     }
     Validate.notNull(accessToken, "Access token not set");
     return this.accessToken;
