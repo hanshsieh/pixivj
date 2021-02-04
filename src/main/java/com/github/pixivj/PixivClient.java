@@ -8,10 +8,6 @@ import com.github.pixivj.exception.PixivException;
 import com.github.pixivj.token.ThreadedTokenProvider;
 import com.github.pixivj.token.TokenProvider;
 import com.github.pixivj.util.HexUtils;
-import org.checkerframework.com.google.common.io.Closeables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -143,16 +139,51 @@ public class PixivClient implements Closeable {
     return authRequestSender.send(request, AuthResult.class);
   }
 
+  /**
+   * Grabs a list of ranked illustrations.
+   * @param filter the filter to use.
+   * @return Ranked Illustrations.
+   * @throws PixivException PixivException Error
+   * @throws IOException IOException Error
+   */
   @NonNull
   public RankedIllusts getRankedIllusts(@NonNull RankedIllustsFilter filter) throws PixivException, IOException {
     return sendQueryRequest("v1/illust/ranking", filter, RankedIllusts.class);
   }
-
+  /**
+   * Grabs a list of recommended illustrations.
+   * @param filter the filter to use.
+   * @return Recommended Illustrations.
+   * @throws PixivException PixivException Error
+   * @throws IOException IOException Error
+   */
   @NonNull
   public RecommendIllusts getRecommendedIllusts(@NonNull RecommendedIllustsFilter filter) throws PixivException, IOException {
     return sendQueryRequest("v1/illust/recommended", filter, RecommendIllusts.class);
   }
+  /**
+   * Searches illustrations from Pixiv.
+   * @param tag the tag to search.
+   * @return Search Illustration Results.
+   * @throws PixivException PixivException Error
+   * @throws IOException IOException Error
+   */
+  @NonNull
+  public SearchIllusts searchIllusts(@NonNull String tag) throws PixivException, IOException {
+    HttpUrl url = apiBaseUrl.newBuilder().addEncodedPathSegments("v1/search/illust")
+            .addQueryParameter("search_target", "partial_match_for_tags").addQueryParameter("sort", "date_desc")
+            .addQueryParameter("word", tag).build();
+    Request request = createApiReqBuilder().url(url).get().build();
+    return apiRequestSender.send(request, SearchIllusts.class);
+  }
 
+  /**
+   * Grabs the details of a certain illustration.
+   * @param illustId the id of the illustration.
+   * @return Illustration Detail.
+   * @throws PixivException PixivException Error
+   * @throws IOException IOException Error
+   */
   @NonNull
   public IllustDetail getIllustDetail(long illustId) throws PixivException, IOException {
     HttpUrl url = apiBaseUrl.newBuilder()
