@@ -169,10 +169,10 @@ public class PixivClient implements Closeable {
    * @throws IOException IOException Error
    */
   @NonNull
-  public SearchIllusts searchIllusts(@NonNull String tag) throws PixivException, IOException {
+  public SearchIllusts searchIllusts(@NonNull String tag, int offset) throws PixivException, IOException {
     HttpUrl url = apiBaseUrl.newBuilder().addEncodedPathSegments("v1/search/illust")
             .addQueryParameter("search_target", "partial_match_for_tags").addQueryParameter("sort", "date_desc")
-            .addQueryParameter("word", tag).build();
+            .addQueryParameter("word", tag).addQueryParameter("offset", String.valueOf(offset)).build();
     Request request = createApiReqBuilder().url(url).get().build();
     return apiRequestSender.send(request, SearchIllusts.class);
   }
