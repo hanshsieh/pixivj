@@ -8,6 +8,32 @@ A java client for Pixiv.
 Currently, only a small subset of the APIs are implemented.
 
 # Usage
+
+Searching for illustrations through tags:
+
+```java
+PixivClient client = new PixivClient.Builder()
+    .build();
+Credential credential = new Credential();
+credential.setUsername("your_user_name");
+credential.setPassword("your_password");
+try {
+  AuthResult authResult = client.login(credential);
+  
+  // Searches for the illustration.
+  SearchIllusts illusts = client.searchIllusts("yuri");
+  
+  // Print out all the illustration's large image urls.
+  illusts.getillusts().forEach(illustration -> System.out.println(illustration.getImageUrls().getLarge()));
+  
+} catch (AuthException ex) {
+  System.out.println(ex.getMessage());
+  System.out.println(ex.getError().getDetails().getSystem().getMessage());
+}
+```
+
+Recommended Illustrations:
+
 ```java
 PixivClient client = new PixivClient.Builder()
     .build();
