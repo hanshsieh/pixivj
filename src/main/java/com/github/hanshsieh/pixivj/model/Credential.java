@@ -1,7 +1,7 @@
 package com.github.hanshsieh.pixivj.model;
 
+import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.com.google.common.base.Objects;
 
 public class Credential {
 
@@ -149,18 +149,18 @@ public class Credential {
       return false;
     }
     Credential that = (Credential) other;
-    return Objects.equal(clientId, that.clientId) &&
-        Objects.equal(clientSecret, that.clientSecret) &&
-        Objects.equal(grantType, that.grantType) &&
-        Objects.equal(username, that.username) &&
-        Objects.equal(password, that.password) &&
-        Objects.equal(refreshToken, that.refreshToken) &&
-        Objects.equal(hashSecret, that.hashSecret);
+    return Objects.equals(clientId, that.clientId) &&
+        Objects.equals(clientSecret, that.clientSecret) &&
+        Objects.equals(grantType, that.grantType) &&
+        Objects.equals(username, that.username) &&
+        Objects.equals(password, that.password) &&
+        Objects.equals(refreshToken, that.refreshToken) &&
+        Objects.equals(hashSecret, that.hashSecret);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(
+    return Objects.hash(
         clientId,
         clientSecret,
         grantType,
