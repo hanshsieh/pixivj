@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class AuthResult {
+
   @SerializedName("access_token")
   private String accessToken = null;
 
@@ -29,6 +30,7 @@ public class AuthResult {
 
   /**
    * The issued access token that can be used to access other APIs.
+   *
    * @return accessToken
    **/
   public String getAccessToken() {
@@ -41,6 +43,7 @@ public class AuthResult {
 
   /**
    * The number of seconds from now that the access token will expire.
+   *
    * @return expiresIn
    **/
   public long getExpiresIn() {
@@ -53,6 +56,7 @@ public class AuthResult {
 
   /**
    * Get tokenType
+   *
    * @return tokenType
    **/
   public String getTokenType() {
@@ -65,6 +69,7 @@ public class AuthResult {
 
   /**
    * Get scope
+   *
    * @return scope
    **/
   public String getScope() {
@@ -76,7 +81,9 @@ public class AuthResult {
   }
 
   /**
-   * The token that can be used to get a refreshed access token within expiry time without doing the authentication again.
+   * The token that can be used to get a refreshed access token within expiry time without doing the
+   * authentication again.
+   *
    * @return refreshToken
    **/
   public String getRefreshToken() {
@@ -89,6 +96,7 @@ public class AuthResult {
 
   /**
    * Get user
+   *
    * @return user
    **/
   public User getUser() {
@@ -101,6 +109,7 @@ public class AuthResult {
 
   /**
    * Get deviceToken
+   *
    * @return deviceToken
    **/
   public String getDeviceToken() {

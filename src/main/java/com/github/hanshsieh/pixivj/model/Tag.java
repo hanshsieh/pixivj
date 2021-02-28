@@ -6,6 +6,7 @@ import com.github.hanshsieh.pixivj.util.JsonUtils;
 import java.util.Objects;
 
 public class Tag {
+
   @SerializedName("name")
   private String name = null;
 
@@ -14,6 +15,7 @@ public class Tag {
 
   /**
    * Get name
+   *
    * @return name
    **/
   public String getName() {
@@ -26,6 +28,7 @@ public class Tag {
 
   /**
    * Get translatedName
+   *
    * @return translatedName
    **/
   public String getTranslatedName() {

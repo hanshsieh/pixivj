@@ -6,11 +6,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class MetaPage {
+
   @SerializedName("image_urls")
   private MetaPageImageUrls imageUrls = null;
 
   /**
    * Get imageUrls
+   *
    * @return imageUrls
    **/
   public MetaPageImageUrls getImageUrls() {

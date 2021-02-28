@@ -6,11 +6,13 @@ import com.github.hanshsieh.pixivj.util.JsonUtils;
 import java.util.Objects;
 
 public class AuthorProfileImageUrls {
+
   @SerializedName("medium")
   private String medium = null;
 
   /**
    * Get medium
+   *
    * @return medium
    **/
   public String getMedium() {

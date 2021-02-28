@@ -3,6 +3,7 @@ package com.github.hanshsieh.pixivj.model;
 import com.google.gson.annotations.SerializedName;
 
 public class AuthErrorDetails {
+
   @SerializedName("system")
   private ErrorInfo system;
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RankedIllusts {
+
   @SerializedName("illusts")
   private List<Illustration> illusts = new ArrayList<>();
 
@@ -17,6 +18,7 @@ public class RankedIllusts {
 
   /**
    * Get illusts
+   *
    * @return illusts
    **/
   public List<Illustration> getIllustrations() {
@@ -29,6 +31,7 @@ public class RankedIllusts {
 
   /**
    * The next URL that can be used for querying the next page, if any.
+   *
    * @return nextUrl
    **/
   public String getNextUrl() {

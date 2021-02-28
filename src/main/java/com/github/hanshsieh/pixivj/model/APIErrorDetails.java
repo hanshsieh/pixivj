@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class APIErrorDetails {
+
   @SerializedName("user_message")
   private String userMessage = null;
 
@@ -21,6 +22,7 @@ public class APIErrorDetails {
 
   /**
    * Get userMessage
+   *
    * @return userMessage
    **/
   public String getUserMessage() {
@@ -33,6 +35,7 @@ public class APIErrorDetails {
 
   /**
    * Get message
+   *
    * @return message
    **/
   public String getMessage() {
@@ -45,6 +48,7 @@ public class APIErrorDetails {
 
   /**
    * Get reason
+   *
    * @return reason
    **/
   public String getReason() {
@@ -57,6 +61,7 @@ public class APIErrorDetails {
 
   /**
    * Details of the error. The schema depends on the error type.
+   *
    * @return userMessageDetails
    **/
   public JsonElement getUserMessageDetails() {

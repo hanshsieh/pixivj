@@ -6,6 +6,7 @@ import com.github.hanshsieh.pixivj.util.JsonUtils;
 import java.util.Objects;
 
 public class Author {
+
   @SerializedName("id")
   private Long id = null;
 
@@ -23,6 +24,7 @@ public class Author {
 
   /**
    * Get id
+   *
    * @return id
    **/
   public Long getId() {
@@ -35,6 +37,7 @@ public class Author {
 
   /**
    * Get profileImageUrls
+   *
    * @return profileImageUrls
    **/
   public AuthorProfileImageUrls getProfileImageUrls() {
@@ -47,6 +50,7 @@ public class Author {
 
   /**
    * Get name
+   *
    * @return name
    **/
   public String getName() {
@@ -59,6 +63,7 @@ public class Author {
 
   /**
    * Account name.
+   *
    * @return account
    **/
   public String getAccount() {
@@ -71,6 +76,7 @@ public class Author {
 
   /**
    * Get isFollowed
+   *
    * @return isFollowed
    **/
   public Boolean isFollowed() {

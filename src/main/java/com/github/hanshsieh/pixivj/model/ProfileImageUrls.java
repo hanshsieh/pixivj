@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class ProfileImageUrls {
+
   @SerializedName("px_16x16")
   private String px16x16 = null;
 
@@ -17,6 +18,7 @@ public class ProfileImageUrls {
 
   /**
    * URL to the user&#x27;s profile image in 16x16 pixels.
+   *
    * @return px16x16
    **/
   public String getPx16x16() {
@@ -29,6 +31,7 @@ public class ProfileImageUrls {
 
   /**
    * URL to the user&#x27;s profile image in 50x50 pixels.
+   *
    * @return px50x50
    **/
   public String getPx50x50() {
@@ -41,6 +44,7 @@ public class ProfileImageUrls {
 
   /**
    * URL to the user&#x27;s profile image in 170x170 pixels.
+   *
    * @return px170x170
    **/
   public String getPx170x170() {

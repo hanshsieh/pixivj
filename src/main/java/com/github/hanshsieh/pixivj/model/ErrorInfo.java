@@ -4,6 +4,7 @@ import com.github.hanshsieh.pixivj.util.JsonUtils;
 import com.google.gson.annotations.SerializedName;
 
 public class ErrorInfo {
+
   @SerializedName("message")
   private String message;
   @SerializedName("code")

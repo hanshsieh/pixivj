@@ -3,7 +3,9 @@ package com.github.hanshsieh.pixivj.util;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class HexUtils {
+
   private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
+
   @NonNull
   public static String bytesToHex(byte[] bytes) {
     char[] hexChars = new char[bytes.length * 2];

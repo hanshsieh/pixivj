@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RecommendIllusts {
+
   @SerializedName("illusts")
   private List<Illustration> illusts = new ArrayList<Illustration>();
 
@@ -25,6 +26,7 @@ public class RecommendIllusts {
 
   /**
    * Get illusts
+   *
    * @return illusts
    **/
   public List<Illustration> getIllusts() {
@@ -37,6 +39,7 @@ public class RecommendIllusts {
 
   /**
    * Get rankingIllusts
+   *
    * @return rankingIllusts
    **/
   public List<Illustration> getRankingIllusts() {
@@ -49,6 +52,7 @@ public class RecommendIllusts {
 
   /**
    * Get contestExists
+   *
    * @return contestExists
    **/
   public Boolean isContestExists() {
@@ -61,6 +65,7 @@ public class RecommendIllusts {
 
   /**
    * Get privacyPolicy
+   *
    * @return privacyPolicy
    **/
   public PrivacyPolicy getPrivacyPolicy() {
@@ -73,6 +78,7 @@ public class RecommendIllusts {
 
   /**
    * The next URL that can be used for querying the next page, if any.
+   *
    * @return nextUrl
    **/
   public String getNextUrl() {

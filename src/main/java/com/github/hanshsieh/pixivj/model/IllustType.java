@@ -10,6 +10,7 @@ public enum IllustType {
   UGOIRA,
   @SerializedName("manga")
   MANGA;
+
   @Override
   public String toString() {
     return JsonUtils.GSON.toJson(this);

@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class PrivacyPolicy {
+
   @SerializedName("version")
   private String version = null;
 
@@ -17,6 +18,7 @@ public class PrivacyPolicy {
 
   /**
    * Get version
+   *
    * @return version
    **/
   public String getVersion() {
@@ -29,6 +31,7 @@ public class PrivacyPolicy {
 
   /**
    * Get message
+   *
    * @return message
    **/
   public String getMessage() {
@@ -41,6 +44,7 @@ public class PrivacyPolicy {
 
   /**
    * Get url
+   *
    * @return url
    **/
   public String getUrl() {

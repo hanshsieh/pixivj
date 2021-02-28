@@ -6,11 +6,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class MetaSinglePage {
+
   @SerializedName("original_image_url")
   private String originalImageUrl = null;
 
   /**
    * The URL to the original size of the illustration.
+   *
    * @return originalImageUrl
    **/
   public String getOriginalImageUrl() {

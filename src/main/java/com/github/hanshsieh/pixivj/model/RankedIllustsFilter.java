@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.time.LocalDate;
 
 public class RankedIllustsFilter {
+
   @SerializedName("filter")
   private FilterType filter;
   @SerializedName("mode")

@@ -6,11 +6,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class APIError {
+
   @SerializedName("error")
   private APIErrorDetails error = null;
 
   /**
    * Get error
+   *
    * @return error
    **/
   public APIErrorDetails getError() {

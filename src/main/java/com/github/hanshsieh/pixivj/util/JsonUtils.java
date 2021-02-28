@@ -9,8 +9,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 public class JsonUtils {
+
   public static final Gson GSON = new GsonBuilder()
-      .registerTypeAdapter(LocalDate .class, new LocalDateAdapter())
-      .registerTypeAdapter(OffsetDateTime .class, new OffsetDateTimeAdapter())
+      .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+      .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeAdapter())
       .create();
 }
