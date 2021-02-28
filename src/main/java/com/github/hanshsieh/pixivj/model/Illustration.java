@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Illustration {
+
   @SerializedName("id")
   private Long id = null;
 
@@ -79,6 +80,7 @@ public class Illustration {
 
   /**
    * Get id
+   *
    * @return id
    **/
   public Long getId() {
@@ -91,6 +93,7 @@ public class Illustration {
 
   /**
    * Get title
+   *
    * @return title
    **/
   public String getTitle() {
@@ -103,6 +106,7 @@ public class Illustration {
 
   /**
    * Get type
+   *
    * @return type
    **/
   public IllustType getType() {
@@ -115,6 +119,7 @@ public class Illustration {
 
   /**
    * Get imageUrls
+   *
    * @return imageUrls
    **/
   public IllustImageUrls getImageUrls() {
@@ -127,6 +132,7 @@ public class Illustration {
 
   /**
    * Get caption
+   *
    * @return caption
    **/
   public String getCaption() {
@@ -139,6 +145,7 @@ public class Illustration {
 
   /**
    * Get restrict
+   *
    * @return restrict
    **/
   public Integer getRestrict() {
@@ -151,6 +158,7 @@ public class Illustration {
 
   /**
    * Get user
+   *
    * @return user
    **/
   public Author getUser() {
@@ -168,6 +176,7 @@ public class Illustration {
 
   /**
    * Get tags
+   *
    * @return tags
    **/
   public List<Tag> getTags() {
@@ -180,6 +189,7 @@ public class Illustration {
 
   /**
    * Get tools
+   *
    * @return tools
    **/
   public List<String> getTools() {
@@ -192,6 +202,7 @@ public class Illustration {
 
   /**
    * Get createDate
+   *
    * @return createDate
    **/
   public OffsetDateTime getCreateDate() {
@@ -204,6 +215,7 @@ public class Illustration {
 
   /**
    * Total number of pages for the illustration.
+   *
    * @return pageCount
    **/
   public Integer getPageCount() {
@@ -216,6 +228,7 @@ public class Illustration {
 
   /**
    * Get width
+   *
    * @return width
    **/
   public Integer getWidth() {
@@ -228,6 +241,7 @@ public class Illustration {
 
   /**
    * Get height
+   *
    * @return height
    **/
   public Integer getHeight() {
@@ -240,6 +254,7 @@ public class Illustration {
 
   /**
    * Get sanityLevel
+   *
    * @return sanityLevel
    **/
   public Integer getSanityLevel() {
@@ -252,6 +267,7 @@ public class Illustration {
 
   /**
    * Get xRestrict
+   *
    * @return xRestrict
    **/
   public Integer getXRestrict() {
@@ -264,6 +280,7 @@ public class Illustration {
 
   /**
    * Get series
+   *
    * @return series
    **/
   public Series getSeries() {
@@ -276,6 +293,7 @@ public class Illustration {
 
   /**
    * Get metaSinglePage
+   *
    * @return metaSinglePage
    **/
   public MetaSinglePage getMetaSinglePage() {
@@ -288,6 +306,7 @@ public class Illustration {
 
   /**
    * Get metaPages
+   *
    * @return metaPages
    **/
   public List<MetaPage> getMetaPages() {
@@ -300,6 +319,7 @@ public class Illustration {
 
   /**
    * Get totalView
+   *
    * @return totalView
    **/
   public Integer getTotalView() {
@@ -312,6 +332,7 @@ public class Illustration {
 
   /**
    * Get totalBookmarks
+   *
    * @return totalBookmarks
    **/
   public Integer getTotalBookmarks() {
@@ -324,6 +345,7 @@ public class Illustration {
 
   /**
    * Get isBookmarked
+   *
    * @return isBookmarked
    **/
   public Boolean isBookmarked() {
@@ -336,6 +358,7 @@ public class Illustration {
 
   /**
    * Get visible
+   *
    * @return visible
    **/
   public Boolean isVisible() {
@@ -348,6 +371,7 @@ public class Illustration {
 
   /**
    * Get isMuted
+   *
    * @return isMuted
    **/
   public Boolean isMuted() {

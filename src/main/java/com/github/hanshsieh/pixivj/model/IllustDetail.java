@@ -6,11 +6,13 @@ import com.github.hanshsieh.pixivj.util.JsonUtils;
 import java.util.Objects;
 
 public class IllustDetail {
+
   @SerializedName("illust")
   private Illustration illust;
 
   /**
    * Gets illustration.
+   *
    * @return Illustration.
    **/
   public Illustration getIllust() {
@@ -19,6 +21,7 @@ public class IllustDetail {
 
   /**
    * Sets illustration.
+   *
    * @param illust Illustration.
    */
   public void setIllust(Illustration illust) {

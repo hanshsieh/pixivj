@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class Series {
+
   @SerializedName("id")
   private Long id = null;
 
@@ -14,6 +15,7 @@ public class Series {
 
   /**
    * Get id
+   *
    * @return id
    **/
   public Long getId() {
@@ -26,6 +28,7 @@ public class Series {
 
   /**
    * Get title
+   *
    * @return title
    **/
   public String getTitle() {

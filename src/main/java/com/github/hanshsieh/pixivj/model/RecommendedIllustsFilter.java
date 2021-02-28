@@ -3,6 +3,7 @@ package com.github.hanshsieh.pixivj.model;
 import com.google.gson.annotations.SerializedName;
 
 public class RecommendedIllustsFilter {
+
   @SerializedName("filter")
   private FilterType filter;
   @SerializedName("min_bookmark_id_for_recent_illust")

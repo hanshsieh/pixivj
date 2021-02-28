@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class SearchIllusts {
+
   @SerializedName("illusts")
   private List<Illustration> illusts = new ArrayList<>();
 
@@ -16,6 +17,7 @@ public class SearchIllusts {
 
   /**
    * Get illusts
+   *
    * @return illusts
    **/
   public List<Illustration> getIllusts() {
@@ -28,6 +30,7 @@ public class SearchIllusts {
 
   /**
    * The next URL that can be used for querying the next page, if any.
+   *
    * @return nextUrl
    **/
   public String getNextUrl() {
@@ -40,11 +43,15 @@ public class SearchIllusts {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     SearchIllusts that = (SearchIllusts) o;
     return Objects.equals(getIllusts(), that.getIllusts()) &&
-            Objects.equals(getNextUrl(), that.getNextUrl());
+        Objects.equals(getNextUrl(), that.getNextUrl());
   }
 
   @Override

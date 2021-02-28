@@ -6,6 +6,7 @@ import com.github.hanshsieh.pixivj.util.JsonUtils;
 import java.util.Objects;
 
 public class IllustImageUrls {
+
   @SerializedName("square_medium")
   private String squareMedium = null;
 
@@ -17,6 +18,7 @@ public class IllustImageUrls {
 
   /**
    * Get squareMedium
+   *
    * @return squareMedium
    **/
   public String getSquareMedium() {
@@ -29,6 +31,7 @@ public class IllustImageUrls {
 
   /**
    * Get medium
+   *
    * @return medium
    **/
   public String getMedium() {
@@ -41,6 +44,7 @@ public class IllustImageUrls {
 
   /**
    * Get large
+   *
    * @return large
    **/
   public String getLarge() {

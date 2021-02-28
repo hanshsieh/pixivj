@@ -1,4 +1,4 @@
-package com.github.hanshsieh.pixivj;
+package com.github.hanshsieh.pixivj.util;
 
 import com.github.hanshsieh.pixivj.util.JsonUtils;
 import com.google.gson.JsonElement;
@@ -8,10 +8,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Map;
 
-class QueryParamConverter {
+public class QueryParamConverter {
+
   public <T> void toQueryParams(@NonNull T obj, HttpUrl.@NonNull Builder urlBuilder) {
     JsonObject jsonObj = JsonUtils.GSON.toJsonTree(obj)
-      .getAsJsonObject();
+        .getAsJsonObject();
     for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
       if (entry.getValue() != null) {
         urlBuilder.addQueryParameter(entry.getKey(), entry.getValue().getAsString());

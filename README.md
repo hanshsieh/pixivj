@@ -5,67 +5,72 @@ A java client for Pixiv.
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.hanshsieh/pixivj.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.hanshsieh%22%20AND%20a:%22pixivj%22)  
 [Pixiv API doc](https://hanshsieh.github.io/pixiv-api-doc)
 
-Currently, only a small subset of the APIs are implemented.
+Currently, only a small subset of the APIs are implemented.  
+> Notice: Because of the change of Pixiv authentication API, this library currently doesn't provide
+> a way to obtain the access token programically. The implementation is in progress. Please see the 
+> *Issues*.  
+> For now, you can manually go to the [login URL](https://app-api.pixiv.net/web/v1/login?code_challenge=F_reT3JvK8doGUKdrVR1rG8DV2iVpFTxQ-vEeZH8TVA&code_challenge_method=S256&client=pixiv-android),
+> open your browser's debug console, login your account. You should be able to find the access token
+> and refresh token from the responses. Then, you can manually feed the tokens into the library.
 
 # Usage
 
-Searching for illustrations through tags:
-
 ```java
-PixivClient client = new PixivClient.Builder()
-    .build();
-Credential credential = new Credential();
-credential.setUsername("your_user_name");
-credential.setPassword("your_password");
-try {
-  AuthResult authResult = client.login(credential);
-  
-  // Searches for the illustration.
-  SearchIllusts illusts = client.searchIllusts("yuri");
-  
-  // Print out all the illustration's large image urls.
-  illusts.getillusts().forEach(illustration -> System.out.println(illustration.getImageUrls().getLarge()));
-  
-} catch (AuthException ex) {
-  System.out.println(ex.getMessage());
-  System.out.println(ex.getError().getDetails().getSystem().getMessage());
+import com.github.hanshsieh.pixivj.api.PixivApiClient;
+import com.github.hanshsieh.pixivj.model.FilterMode;
+import com.github.hanshsieh.pixivj.model.FilterType;
+import com.github.hanshsieh.pixivj.model.IllustDetail;
+import com.github.hanshsieh.pixivj.model.RankedIllusts;
+import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
+import com.github.hanshsieh.pixivj.model.RecommendIllusts;
+import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
+import com.github.hanshsieh.pixivj.model.SearchIllusts;
+import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
+import com.github.hanshsieh.pixivj.token.ThreadedTokenProvider;
+
+public class Main {
+  public static void main(String[] args) {
+    PixivOAuthClient authClient = new PixivOAuthClient.Builder().build();
+    ThreadedTokenProvider tokenProvider = new ThreadedTokenProvider(authClient);
+    tokenProvider.setTokens("your_access_token", "your_refresh_token", 86400);
+    PixivApiClient client = new PixivApiClient.Builder()
+        .setTokenProvider(tokenProvider)
+        .build();
+    try {
+      // Searches for the illustration.
+      SearchIllusts illusts = client.searchIllusts("yuri", 0);
+
+      // Print out all the illustration's large image urls.
+      illusts.getIllusts().forEach(illustration -> System.out.println(illustration.getImageUrls().getLarge()));
+      RankedIllustsFilter filter = new RankedIllustsFilter();
+      filter.setMode(FilterMode.DAY_MALE);
+      filter.setFilter(FilterType.FOR_ANDROID);
+      filter.setOffset(0);
+      RankedIllusts rankedIllusts = client.getRankedIllusts(filter);
+      System.out.println(rankedIllusts);
+
+      // Recommended Illustrations
+      RecommendedIllustsFilter recommendedIllustsFilter = new RecommendedIllustsFilter();
+      recommendedIllustsFilter.setFilter(FilterType.FOR_IOS);
+      recommendedIllustsFilter.setIncludePrivacyPolicy(true);
+      recommendedIllustsFilter.setOffset(0);
+      RecommendIllusts recommendedIllusts = client.getRecommendedIllusts(recommendedIllustsFilter);
+      System.out.println(recommendedIllusts);
+      IllustDetail detail = client.getIllustDetail(recommendedIllusts.getIllusts().get(0).getId());
+      System.out.println(detail);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
 }
 ```
 
-Recommended Illustrations:
+# Contribution
+## Style
+Please follow the [Google coding style](https://google.github.io/styleguide/javaguide.html).  
+You may apply the IntelliJ style file [here](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml).  
 
-```java
-PixivClient client = new PixivClient.Builder()
-    .build();
-Credential credential = new Credential();
-credential.setUsername("your_user_name");
-credential.setPassword("your_password");
-try {
-  AuthResult authResult = client.login(credential);
-  System.out.println(authResult);
-
-  RankedIllustsFilter filter = new RankedIllustsFilter();
-  filter.setMode(FilterMode.DAY_MALE);
-  filter.setFilter(FilterType.FOR_ANDROID);
-  filter.setOffset(0);
-  RankedIllusts rankedIllusts = client.getRankedIllusts(filter);
-  System.out.println(rankedIllusts);
-  
-  RecommendedIllustsFilter recommendedIllustsFilter = new RecommendedIllustsFilter();
-  recommendedIllustsFilter.setFilter(FilterType.FOR_IOS);
-  recommendedIllustsFilter.setIncludePrivacyPolicy(true);
-  recommendedIllustsFilter.setOffset(0);
-  RecommendIllusts recommendedIllusts = client.getRecommendedIllusts(recommendedIllustsFilter);
-  System.out.println(recommendedIllusts);
-  IllustDetail detail = client.getIllustDetail(recommendedIllusts.getIllusts().get(0).getId());
-  System.out.println(detail);
-} catch (AuthException ex) {
-  System.out.println(ex.getMessage());
-  System.out.println(ex.getError().getDetails().getSystem().getMessage());
-}
-```
-
-# Release
+## Release
 Follow the guide at [here](https://central.sonatype.org/pages/apache-maven.html) to setup your PGP key and 
 `settings.xml`.  
 Update the version in `pom.xml` appropriately.  

@@ -2,10 +2,12 @@ package com.github.hanshsieh.pixivj.model;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+
 /**
  * FullUser
  */
 public class User {
+
   @SerializedName("profile_image_urls")
   private ProfileImageUrls profileImageUrls = null;
 
@@ -32,6 +34,7 @@ public class User {
 
   /**
    * Get profileImageUrls
+   *
    * @return profileImageUrls
    **/
   public ProfileImageUrls getProfileImageUrls() {
@@ -44,6 +47,7 @@ public class User {
 
   /**
    * Internal numerical user ID.
+   *
    * @return id
    **/
   public String getId() {
@@ -56,6 +60,7 @@ public class User {
 
   /**
    * The name of the user.
+   *
    * @return name
    **/
   public String getName() {
@@ -68,6 +73,7 @@ public class User {
 
   /**
    * The account name used for log in.
+   *
    * @return account
    **/
   public String getAccount() {
@@ -80,6 +86,7 @@ public class User {
 
   /**
    * Email address of the user.
+   *
    * @return mailAddress
    **/
   public String getMailAddress() {
@@ -92,6 +99,7 @@ public class User {
 
   /**
    * Whether the user has bought the premimum subscription.
+   *
    * @return isPremium
    **/
   public boolean isPremium() {
@@ -104,6 +112,7 @@ public class User {
 
   /**
    * Get xRestrict
+   *
    * @return xRestrict
    **/
   public Integer getXRestrict() {
@@ -116,6 +125,7 @@ public class User {
 
   /**
    * Whether the email of the user has been validated.
+   *
    * @return isMailAuthorized
    **/
   public boolean isMailAuthorized() {
@@ -148,7 +158,8 @@ public class User {
 
   @Override
   public int hashCode() {
-    return Objects.hash(profileImageUrls, id, name, account, mailAddress, premium, xRestrict, mailAuthorized);
+    return Objects
+        .hash(profileImageUrls, id, name, account, mailAddress, premium, xRestrict, mailAuthorized);
   }
 
 
@@ -168,8 +179,8 @@ public class User {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private static String toIndentedString(Object o) {
     if (o == null) {

@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class MetaPageImageUrls {
+
   @SerializedName("square_medium")
   private String squareMedium = null;
 
@@ -20,6 +21,7 @@ public class MetaPageImageUrls {
 
   /**
    * Get squareMedium
+   *
    * @return squareMedium
    **/
   public String getSquareMedium() {
@@ -32,6 +34,7 @@ public class MetaPageImageUrls {
 
   /**
    * Get medium
+   *
    * @return medium
    **/
   public String getMedium() {
@@ -44,6 +47,7 @@ public class MetaPageImageUrls {
 
   /**
    * Get large
+   *
    * @return large
    **/
   public String getLarge() {
@@ -56,6 +60,7 @@ public class MetaPageImageUrls {
 
   /**
    * Get original
+   *
    * @return original
    **/
   public String getOriginal() {

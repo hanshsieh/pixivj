@@ -4,14 +4,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.com.google.common.base.Objects;
 
 public class Credential {
+
   public static final String CLIENT_ID_MOBILE = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
   public static final String CLIENT_SECRET_MOBILE = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
-  public static final String GRANT_TYPE_PASSWORD = "password";
   public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
   public static final String DEFAULT_HASH_SECRET = "28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c";
   private String clientId = CLIENT_ID_MOBILE;
   private String clientSecret = CLIENT_SECRET_MOBILE;
-  private String grantType = GRANT_TYPE_PASSWORD;
+  private String grantType = GRANT_TYPE_REFRESH_TOKEN;
   private String username;
   private String password;
   private String refreshToken;
@@ -19,6 +19,7 @@ public class Credential {
 
   /**
    * Gets the OAuth client ID.
+   *
    * @return Client ID.
    */
   public String getClientId() {
@@ -26,8 +27,8 @@ public class Credential {
   }
 
   /**
-   * Sets the OAuth client ID.
-   * The default value is for acting as the official mobile app.
+   * Sets the OAuth client ID. The default value is for acting as the official mobile app.
+   *
    * @param clientId Client ID.
    */
   public void setClientId(String clientId) {
@@ -36,6 +37,7 @@ public class Credential {
 
   /**
    * Gets the OAuth client secret.
+   *
    * @return Client secret.
    */
   public String getClientSecret() {
@@ -53,6 +55,7 @@ public class Credential {
 
   /**
    * Gets grant type.
+   *
    * @return Grant type.
    */
   public String getGrantType() {
@@ -61,6 +64,7 @@ public class Credential {
 
   /**
    * Sets grant type.
+   *
    * @param grantType Grant type.
    */
   public void setGrantType(String grantType) {
@@ -68,8 +72,8 @@ public class Credential {
   }
 
   /**
-   * Gets username.
-   * It's required when the grant type is "password".
+   * Gets username. It's required when the grant type is "password".
+   *
    * @return Username.
    */
   public String getUsername() {
@@ -77,8 +81,8 @@ public class Credential {
   }
 
   /**
-   * Sets username.
-   * It's required when the grant type is "password".
+   * Sets username. It's required when the grant type is "password".
+   *
    * @param username Username.
    */
   public void setUsername(String username) {
@@ -87,6 +91,7 @@ public class Credential {
 
   /**
    * Gets password.
+   *
    * @return Password.
    */
   public String getPassword() {
@@ -94,8 +99,8 @@ public class Credential {
   }
 
   /**
-   * Sets password.
-   * It's required when the grant type is "password".
+   * Sets password. It's required when the grant type is "password".
+   *
    * @param password Password.
    */
   public void setPassword(String password) {
@@ -104,6 +109,7 @@ public class Credential {
 
   /**
    * Gets refresh token.
+   *
    * @return Refresh token.
    */
   public String getRefreshToken() {
@@ -111,8 +117,8 @@ public class Credential {
   }
 
   /**
-   * Sets refresh token.
-   * It's required when the grant type is "refresh_token".
+   * Sets refresh token. It's required when the grant type is "refresh_token".
+   *
    * @param refreshToken Refresh token.
    */
   public void setRefreshToken(String refreshToken) {
@@ -121,6 +127,7 @@ public class Credential {
 
   /**
    * Gets hash secret used for generating the client hash.
+   *
    * @return Hash secret.
    */
   public String getHashSecret() {
@@ -129,6 +136,7 @@ public class Credential {
 
   /**
    * Sets the hash secret used for generating the client hash.
+   *
    * @param hashSecret Hash secret.
    */
   public void setHashSecret(String hashSecret) {
@@ -142,12 +150,12 @@ public class Credential {
     }
     Credential that = (Credential) other;
     return Objects.equal(clientId, that.clientId) &&
-            Objects.equal(clientSecret, that.clientSecret) &&
-            Objects.equal(grantType, that.grantType) &&
-            Objects.equal(username, that.username) &&
-            Objects.equal(password, that.password) &&
-            Objects.equal(refreshToken, that.refreshToken) &&
-            Objects.equal(hashSecret, that.hashSecret);
+        Objects.equal(clientSecret, that.clientSecret) &&
+        Objects.equal(grantType, that.grantType) &&
+        Objects.equal(username, that.username) &&
+        Objects.equal(password, that.password) &&
+        Objects.equal(refreshToken, that.refreshToken) &&
+        Objects.equal(hashSecret, that.hashSecret);
   }
 
   @Override

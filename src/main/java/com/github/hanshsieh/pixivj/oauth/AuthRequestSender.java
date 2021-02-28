@@ -1,12 +1,13 @@
-package com.github.hanshsieh.pixivj;
+package com.github.hanshsieh.pixivj.oauth;
 
+import com.github.hanshsieh.pixivj.util.RequestSender;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.model.AuthError;
 import okhttp3.OkHttpClient;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import com.github.hanshsieh.pixivj.util.JsonUtils;
 
-class AuthRequestSender extends RequestSender<AuthException> {
+public class AuthRequestSender extends RequestSender<AuthException> {
 
   public AuthRequestSender(@NonNull OkHttpClient httpClient) {
     super(httpClient);
