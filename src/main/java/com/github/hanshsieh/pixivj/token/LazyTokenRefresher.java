@@ -3,6 +3,7 @@ package com.github.hanshsieh.pixivj.token;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
+import com.github.hanshsieh.pixivj.model.GrantType;
 import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
 import java.io.IOException;
 import java.time.Duration;
@@ -67,7 +68,7 @@ public class LazyTokenRefresher implements TokenRefresher {
       logger.debug("Access token is expired, refreshing it");
       Credential credential = new Credential();
       credential.setRefreshToken(this.refreshToken);
-      credential.setGrantType(Credential.GRANT_TYPE_REFRESH_TOKEN);
+      credential.setGrantType(GrantType.REFRESH_TOKEN);
       AuthResult authResult = client.authenticate(credential);
       updateTokens(
           authResult.getAccessToken(),

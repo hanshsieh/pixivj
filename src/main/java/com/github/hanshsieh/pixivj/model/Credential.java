@@ -4,17 +4,20 @@ import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Credential {
-
   public static final String CLIENT_ID_MOBILE = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
   public static final String CLIENT_SECRET_MOBILE = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
-  public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
   public static final String DEFAULT_HASH_SECRET = "28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c";
+  public static final String DEFAULT_REDIRECT_URI = "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback";
   private String clientId = CLIENT_ID_MOBILE;
   private String clientSecret = CLIENT_SECRET_MOBILE;
-  private String grantType = GRANT_TYPE_REFRESH_TOKEN;
+  private GrantType grantType = GrantType.REFRESH_TOKEN;
   private String username;
   private String password;
   private String refreshToken;
+  private String codeVerifier;
+  private String code;
+  private String redirectUri = DEFAULT_REDIRECT_URI;
+  private Boolean includePolicy = true;
   private String hashSecret = DEFAULT_HASH_SECRET;
 
   /**
@@ -33,6 +36,74 @@ public class Credential {
    */
   public void setClientId(String clientId) {
     this.clientId = clientId;
+  }
+
+  /**
+   * Gets the code verifier.
+   * This is used when the "grantType" is {@link GrantType#AUTHORIZATION_CODE}.
+   * @return Code verifier.
+   */
+  public String getCodeVerifier() {
+    return codeVerifier;
+  }
+
+  /**
+   * Sets code verifier.
+   * This is used when the "grantType" is {@link GrantType#AUTHORIZATION_CODE}.
+   * @param codeVerifier Code verifier.
+   */
+  public void setCodeVerifier(String codeVerifier) {
+    this.codeVerifier = codeVerifier;
+  }
+
+  /**
+   * Gets authorization code.
+   * This is used when the "grantType" is {@link GrantType#AUTHORIZATION_CODE}.
+   * @return Authorization code.
+   */
+  public String getCode() {
+    return code;
+  }
+
+  /**
+   * Sets authorization code.
+   * This is used when the "grantType" is {@link GrantType#AUTHORIZATION_CODE}.
+   * @param code Authorization code.
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Gets the redirect URI.
+   * @return Redirect URI.
+   */
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+  /**
+   * Sets the redirect URI.
+   * @param redirectUri Redirect URI.
+   */
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+  }
+
+  /**
+   * Whether to include policy in the response.
+   * @return Include policy or not.
+   */
+  public Boolean isIncludePolicy() {
+    return includePolicy;
+  }
+
+  /**
+   * Sets whether to include policy in the response.
+   * @param includePolicy Include policy.
+   */
+  public void setIncludePolicy(Boolean includePolicy) {
+    this.includePolicy = includePolicy;
   }
 
   /**
@@ -58,7 +129,7 @@ public class Credential {
    *
    * @return Grant type.
    */
-  public String getGrantType() {
+  public GrantType getGrantType() {
     return grantType;
   }
 
@@ -67,7 +138,7 @@ public class Credential {
    *
    * @param grantType Grant type.
    */
-  public void setGrantType(String grantType) {
+  public void setGrantType(GrantType grantType) {
     this.grantType = grantType;
   }
 
@@ -155,7 +226,11 @@ public class Credential {
         Objects.equals(username, that.username) &&
         Objects.equals(password, that.password) &&
         Objects.equals(refreshToken, that.refreshToken) &&
-        Objects.equals(hashSecret, that.hashSecret);
+        Objects.equals(hashSecret, that.hashSecret) &&
+        Objects.equals(codeVerifier, that.codeVerifier) &&
+        Objects.equals(code, that.code) &&
+        Objects.equals(redirectUri, that.redirectUri) &&
+        Objects.equals(includePolicy, that.includePolicy);
   }
 
   @Override
@@ -167,7 +242,11 @@ public class Credential {
         username,
         password,
         refreshToken,
-        hashSecret
+        hashSecret,
+        codeVerifier,
+        code,
+        redirectUri,
+        includePolicy
     );
   }
 }

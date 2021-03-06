@@ -1,5 +1,6 @@
 package com.github.hanshsieh.pixivj.token;
 
+import com.github.hanshsieh.pixivj.model.GrantType;
 import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
@@ -129,7 +130,7 @@ public class ThreadedTokenRefresherTest {
       client.authenticate(credential = withCapture());
       times = 1;
       assertEquals("test_refresh_token", credential.getRefreshToken());
-      assertEquals(Credential.GRANT_TYPE_REFRESH_TOKEN, credential.getGrantType());
+      assertEquals(GrantType.REFRESH_TOKEN, credential.getGrantType());
 
       Runnable runnable;
       executor.schedule(runnable = withCapture(), 3000, TimeUnit.MILLISECONDS);
