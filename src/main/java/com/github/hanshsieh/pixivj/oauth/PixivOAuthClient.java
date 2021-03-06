@@ -19,6 +19,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.lang3.Validate;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PixivOAuthClient {
 
@@ -62,24 +63,28 @@ public class PixivOAuthClient {
     this.requestSender = new AuthRequestSender(httpClient);
   }
 
+  private void addFormFieldIfNotNull(FormBody.@NonNull Builder form, @NonNull String fieldName, @Nullable Object value) {
+    if (value != null) {
+      form.add(fieldName, value.toString());
+    }
+  }
+
   @NonNull
   public AuthResult authenticate(@NonNull Credential credential) throws AuthException, IOException {
     HttpUrl url = baseUrl.newBuilder()
         .addEncodedPathSegments("auth/token")
         .build();
-    FormBody.Builder bodyBuilder = new FormBody.Builder()
-        .add("client_id", credential.getClientId())
-        .add("client_secret", credential.getClientSecret())
-        .add("grant_type", credential.getGrantType());
-    if (credential.getUsername() != null) {
-      bodyBuilder.add("username", credential.getUsername());
-    }
-    if (credential.getPassword() != null) {
-      bodyBuilder.add("password", credential.getPassword());
-    }
-    if (credential.getRefreshToken() != null) {
-      bodyBuilder.add("refresh_token", credential.getRefreshToken());
-    }
+    FormBody.Builder bodyBuilder = new FormBody.Builder();
+    addFormFieldIfNotNull(bodyBuilder, "client_id", credential.getClientId());
+    addFormFieldIfNotNull(bodyBuilder, "client_secret", credential.getClientSecret());
+    addFormFieldIfNotNull(bodyBuilder, "grant_type", credential.getGrantType());
+    addFormFieldIfNotNull(bodyBuilder, "username", credential.getUsername());
+    addFormFieldIfNotNull(bodyBuilder, "password", credential.getPassword());
+    addFormFieldIfNotNull(bodyBuilder, "refresh_token", credential.getRefreshToken());
+    addFormFieldIfNotNull(bodyBuilder, "code", credential.getCode());
+    addFormFieldIfNotNull(bodyBuilder, "code_verifier", credential.getCodeVerifier());
+    addFormFieldIfNotNull(bodyBuilder, "redirect_uri", credential.getRedirectUri());
+    addFormFieldIfNotNull(bodyBuilder, "include_policy", credential.isIncludePolicy());
     FormBody formBody = bodyBuilder.build();
     ZonedDateTime zonedDateTime = ZonedDateTime
         .ofInstant(Instant.ofEpochSecond(Instant.now().getEpochSecond()), ZoneOffset.UTC);

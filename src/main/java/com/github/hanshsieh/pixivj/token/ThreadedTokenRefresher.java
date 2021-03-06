@@ -3,6 +3,7 @@ package com.github.hanshsieh.pixivj.token;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
+import com.github.hanshsieh.pixivj.model.GrantType;
 import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
 import java.io.IOException;
 import java.time.Duration;
@@ -32,12 +33,12 @@ public class ThreadedTokenRefresher implements TokenRefresher {
   public static class Builder {
     public static final double DEFAULT_DELAY_PERCENTAGE = 0.5;
     public static final Duration DEFAULT_RETRY_DELAY = Duration.ofSeconds(3);
-    private PixivOAuthClient client;
+    private PixivOAuthClient authClient;
     private double delayPercentage = DEFAULT_DELAY_PERCENTAGE;
     private Duration retryDelay = DEFAULT_RETRY_DELAY;
     @NonNull
-    public Builder setClient(@NonNull PixivOAuthClient client) {
-      this.client = client;
+    public Builder setAuthClient(@NonNull PixivOAuthClient authClient) {
+      this.authClient = authClient;
       return this;
     }
     @NonNull
@@ -58,7 +59,7 @@ public class ThreadedTokenRefresher implements TokenRefresher {
   private static final Logger logger = LoggerFactory.getLogger(ThreadedTokenRefresher.class);
   private final double delayPercentage;
   private final Duration retryDelay;
-  private final PixivOAuthClient client;
+  private final PixivOAuthClient authClient;
   private String accessToken;
   private String refreshToken;
   private Instant expiryTime;
@@ -78,11 +79,11 @@ public class ThreadedTokenRefresher implements TokenRefresher {
    * @param builder The builder.
    */
   private ThreadedTokenRefresher(@NonNull Builder builder) {
-    Validate.notNull(builder.client, "OAuth client not set");
+    Validate.notNull(builder.authClient, "OAuth client not set");
     Validate.isTrue(builder.delayPercentage < 1.0 && builder.delayPercentage > 0.0,
         "Invalid delay percentage");
     Validate.notNull(builder.retryDelay, "Retry delay not set");
-    this.client = builder.client;
+    this.authClient = builder.authClient;
     this.delayPercentage = builder.delayPercentage;
     this.retryDelay = builder.retryDelay;
   }
@@ -94,7 +95,7 @@ public class ThreadedTokenRefresher implements TokenRefresher {
       @NonNull Instant expiryTime
   ) {
     Validate.notNull(accessToken, "access token cannot be null");
-    Validate.notNull(refreshToken, "refresh token cannot be null");
+    Validate.notNull(refreshToken, "refresh token ca【nnot be null");
     Validate.notNull(expiryTime, "expiry time cannot be null");
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
@@ -109,8 +110,8 @@ public class ThreadedTokenRefresher implements TokenRefresher {
     try {
       Credential credential = new Credential();
       credential.setRefreshToken(this.refreshToken);
-      credential.setGrantType(Credential.GRANT_TYPE_REFRESH_TOKEN);
-      AuthResult authResult = client.authenticate(credential);
+      credential.setGrantType(GrantType.REFRESH_TOKEN);
+      AuthResult authResult = authClient.authenticate(credential);
       logger.debug("Tokens are refreshed");
       updateTokens(authResult.getAccessToken(), authResult.getRefreshToken(),
           Instant.now().plusSeconds(authResult.getExpiresIn()));

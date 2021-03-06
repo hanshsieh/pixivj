@@ -34,7 +34,7 @@ public class Main {
   public static void main(String[] args) {
     PixivOAuthClient authClient = new PixivOAuthClient.Builder().build();
     ThreadedTokenRefresher tokenProvider = new ThreadedTokenRefresher.Builder()
-        .setClient(authClient)
+        .setAuthClient(authClient)
         .build();
     tokenProvider.updateTokens(
         "your_access_token",

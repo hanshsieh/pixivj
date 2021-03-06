@@ -1,5 +1,6 @@
 package com.github.hanshsieh.pixivj.token;
 
+import com.github.hanshsieh.pixivj.model.GrantType;
 import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
@@ -58,7 +59,7 @@ public class LazyTokenRefresherTest {
       times = 1;
       Credential wantCredential = new Credential();
       wantCredential.setRefreshToken("test_refresh_token");
-      wantCredential.setGrantType(Credential.GRANT_TYPE_REFRESH_TOKEN);
+      wantCredential.setGrantType(GrantType.REFRESH_TOKEN);
       assertEquals(wantCredential, credential);
     }};
 
@@ -75,7 +76,7 @@ public class LazyTokenRefresherTest {
       times = 2;
       Credential wantCredential = new Credential();
       wantCredential.setRefreshToken("test_refresh_token2");
-      wantCredential.setGrantType(Credential.GRANT_TYPE_REFRESH_TOKEN);
+      wantCredential.setGrantType(GrantType.REFRESH_TOKEN);
       assertEquals(wantCredential, credential);
     }};
   }
