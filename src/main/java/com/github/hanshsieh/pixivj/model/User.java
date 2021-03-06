@@ -1,7 +1,7 @@
 package com.github.hanshsieh.pixivj.model;
 
-import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import java.util.Objects;
 
 /**
  * FullUser

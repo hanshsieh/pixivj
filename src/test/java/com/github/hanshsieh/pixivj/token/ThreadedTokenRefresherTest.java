@@ -3,8 +3,11 @@ package com.github.hanshsieh.pixivj.token;
 import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
+import java.time.Instant;
 import mockit.Expectations;
 import mockit.Injectable;
+import mockit.Mock;
+import mockit.MockUp;
 import mockit.Mocked;
 import mockit.Verifications;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +24,7 @@ import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ThreadedTokenProviderTest {
+public class ThreadedTokenRefresherTest {
 
   @Injectable
   private ScheduledExecutorService executor;
@@ -31,20 +34,31 @@ public class ThreadedTokenProviderTest {
   private PixivOAuthClient client;
   @Mocked
   private Executors executors;
-  private ThreadedTokenProvider tokenProvider;
+  private ThreadedTokenRefresher tokenProvider;
+  private Instant[] now;
 
   @BeforeEach
   public void beforeEach() {
     new Expectations() {{
       Executors.newSingleThreadScheduledExecutor(withInstanceOf(ThreadFactory.class));
       result = executor;
+      minTimes = 0;
     }};
+    now = new Instant[]{Instant.now()};
+    new MockUp<Instant>() {
+      @Mock
+      Instant now() {
+        return now[0];
+      }
+    };
   }
 
   @Test
   @DisplayName("Constructor will create a single thread executor")
   public void testConstructor(@Injectable Runnable runnable) {
-    tokenProvider = new ThreadedTokenProvider(client);
+    tokenProvider = new ThreadedTokenRefresher.Builder()
+      .setClient(client)
+      .build();
     List<ThreadFactory> threadFactories = new ArrayList<>();
     new Verifications() {{
       ThreadFactory threadFactory;
@@ -62,7 +76,11 @@ public class ThreadedTokenProviderTest {
   @DisplayName("Construct with invalid delay percentage")
   public void testConstructWithInvalidDelayPercentage(double delayPercentage) {
     assertThrows(IllegalArgumentException.class,
-        () -> new ThreadedTokenProvider(client, delayPercentage, Duration.ofSeconds(10)));
+        () -> new ThreadedTokenRefresher.Builder()
+      .setClient(client)
+      .setDelayPercentage(delayPercentage)
+      .setRetryDelay(Duration.ofSeconds(10))
+      .build());
   }
 
   @ParameterizedTest(name = "Delay percentage {0} is valid")
@@ -70,19 +88,26 @@ public class ThreadedTokenProviderTest {
   @DisplayName("Construct with valid delay percentage")
   public void testConstructWithValidDelayPercentage(double delayPercentage) {
     assertDoesNotThrow(
-        () -> new ThreadedTokenProvider(client, delayPercentage, Duration.ofSeconds(10)));
+        () -> new ThreadedTokenRefresher.Builder()
+      .setClient(client)
+      .setDelayPercentage(delayPercentage)
+      .setRetryDelay(Duration.ofSeconds(10))
+      .build());
   }
 
   @Test
   @DisplayName("Set tokens and schedule for refresh")
   public void testSetTokens() throws Exception {
-    tokenProvider = new ThreadedTokenProvider(client);
+    tokenProvider = new ThreadedTokenRefresher.Builder()
+      .setClient(client)
+      .build();
     new Expectations() {{
       executor.schedule(withInstanceOf(Runnable.class), anyLong, withInstanceOf(TimeUnit.class));
       returns(future1, future2, future3);
     }};
     // Set the token, and is scheduled to refresh
-    tokenProvider.setTokens("test_access_token", "test_refresh_token", 100);
+    tokenProvider.updateTokens(
+        "test_access_token", "test_refresh_token", now[0].plusSeconds(100));
     assertEquals("test_access_token", tokenProvider.getAccessToken());
     List<Runnable> runnables = new ArrayList<>();
     new Verifications() {{
@@ -147,7 +172,9 @@ public class ThreadedTokenProviderTest {
   @Test
   @DisplayName("Close")
   public void testClose() {
-    tokenProvider = new ThreadedTokenProvider(client);
+    tokenProvider = new ThreadedTokenRefresher.Builder()
+      .setClient(client)
+      .build();
     tokenProvider.close();
     new Verifications() {{
       executor.shutdownNow();

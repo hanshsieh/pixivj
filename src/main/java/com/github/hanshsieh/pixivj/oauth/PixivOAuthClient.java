@@ -1,17 +1,10 @@
 package com.github.hanshsieh.pixivj.oauth;
 
-import com.github.hanshsieh.pixivj.util.Header;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
+import com.github.hanshsieh.pixivj.util.Header;
 import com.github.hanshsieh.pixivj.util.HexUtils;
-import okhttp3.FormBody;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import org.apache.commons.lang3.Validate;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -20,6 +13,12 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import org.apache.commons.lang3.Validate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class PixivOAuthClient {
 

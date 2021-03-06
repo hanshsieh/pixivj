@@ -1,7 +1,7 @@
 package com.github.hanshsieh.pixivj.exception;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import com.github.hanshsieh.pixivj.model.APIError;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class APIException extends PixivException {
 

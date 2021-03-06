@@ -10,7 +10,7 @@ import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class LazyTokenProviderTest {
+public class LazyTokenRefresherTest {
 
   @Injectable
   private PixivOAuthClient client;
@@ -24,11 +24,11 @@ public class LazyTokenProviderTest {
         return now[0];
       }
     };
-    LazyTokenProvider tokenProvider = new LazyTokenProvider(client);
-    tokenProvider.setTokens(
+    LazyTokenRefresher tokenProvider = new LazyTokenRefresher(client);
+    tokenProvider.updateTokens(
         "test_access_token",
         "test_refresh_token",
-        1000);
+        now[0].plusSeconds(1000));
     // Get the access token immediately
     assertEquals("test_access_token", tokenProvider.getAccessToken());
 

@@ -1,10 +1,9 @@
 package com.github.hanshsieh.pixivj.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.github.hanshsieh.pixivj.adapter.LocalDateAdapter;
 import com.github.hanshsieh.pixivj.adapter.OffsetDateTimeAdapter;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 

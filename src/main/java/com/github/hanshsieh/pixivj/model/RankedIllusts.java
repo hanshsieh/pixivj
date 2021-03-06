@@ -2,11 +2,10 @@ package com.github.hanshsieh.pixivj.model;
 
 import com.github.hanshsieh.pixivj.util.JsonUtils;
 import com.google.gson.annotations.SerializedName;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class RankedIllusts {
 

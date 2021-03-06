@@ -1,17 +1,23 @@
 package com.github.hanshsieh.pixivj.api;
 
-import com.github.hanshsieh.pixivj.util.Header;
-import com.github.hanshsieh.pixivj.util.QueryParamConverter;
-import com.github.hanshsieh.pixivj.model.*;
-import okhttp3.*;
-import org.apache.commons.lang3.Validate;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.exception.PixivException;
+import com.github.hanshsieh.pixivj.model.IllustDetail;
+import com.github.hanshsieh.pixivj.model.RankedIllusts;
+import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
+import com.github.hanshsieh.pixivj.model.RecommendIllusts;
+import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
+import com.github.hanshsieh.pixivj.model.SearchIllusts;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
-
+import com.github.hanshsieh.pixivj.util.Header;
+import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import java.io.Closeable;
 import java.io.IOException;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import org.apache.commons.lang3.Validate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class PixivApiClient implements Closeable {
 
