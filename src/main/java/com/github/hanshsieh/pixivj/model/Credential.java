@@ -7,7 +7,7 @@ public class Credential {
   public static final String CLIENT_ID_MOBILE = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
   public static final String CLIENT_SECRET_MOBILE = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
   public static final String DEFAULT_HASH_SECRET = "28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c";
-  public static final String DEFAULT_REDIRECT_URI = "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback";
+  public static final String REDIRECT_URI_AUTH_CALLBACK = "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback";
   private String clientId = CLIENT_ID_MOBILE;
   private String clientSecret = CLIENT_SECRET_MOBILE;
   private GrantType grantType = GrantType.REFRESH_TOKEN;
@@ -16,8 +16,8 @@ public class Credential {
   private String refreshToken;
   private String codeVerifier;
   private String code;
-  private String redirectUri = DEFAULT_REDIRECT_URI;
-  private Boolean includePolicy = true;
+  private String redirectUri;
+  private Boolean includePolicy;
   private String hashSecret = DEFAULT_HASH_SECRET;
 
   /**
