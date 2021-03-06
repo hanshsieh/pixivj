@@ -17,8 +17,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>13</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>9</maven.compiler.source>
+    <maven.compiler.target>9</maven.compiler.target>
     <jmockit.version>1.49</jmockit.version>
   </properties>
 
@@ -59,7 +59,7 @@
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>4.9.0</version>
+      <version>4.9.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -122,11 +122,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
+          <version>3.8.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
@@ -156,17 +152,29 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>8</source>
-          <target>8</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
+      <!--
+        Patch JPMS at test-runtime.
+        See https://github.com/sormuras/junit-platform-maven-plugin
+      -->
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
+        <groupId>de.sormuras.junit</groupId>
+        <artifactId>junit-platform-maven-plugin</artifactId>
+        <version>1.1.2</version>
+        <extensions>true</extensions>
         <configuration>
-          <argLine>
-            -javaagent:"${settings.localRepository}"/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar
-          </argLine>
+          <executor>JAVA</executor>
+          <isolation>NONE</isolation>
+          <javaOptions>
+            <!--
+              Required by JMockit
+              See http://jmockit.github.io/tutorial/Introduction.html
+            -->
+            <additionalOptions>-javaagent:${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar</additionalOptions>
+          </javaOptions>
         </configuration>
       </plugin>
     </plugins>
