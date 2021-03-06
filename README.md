@@ -16,6 +16,7 @@ Currently, only a small subset of the APIs are implemented.
 # Usage
 
 ```java
+package com.github.hanshsieh.pixivj;
 import com.github.hanshsieh.pixivj.api.PixivApiClient;
 import com.github.hanshsieh.pixivj.model.FilterMode;
 import com.github.hanshsieh.pixivj.model.FilterType;
@@ -26,13 +27,19 @@ import com.github.hanshsieh.pixivj.model.RecommendIllusts;
 import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchIllusts;
 import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
-import com.github.hanshsieh.pixivj.token.ThreadedTokenProvider;
+import com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher;
+import java.time.Instant;
 
 public class Main {
   public static void main(String[] args) {
     PixivOAuthClient authClient = new PixivOAuthClient.Builder().build();
-    ThreadedTokenProvider tokenProvider = new ThreadedTokenProvider(authClient);
-    tokenProvider.setTokens("your_access_token", "your_refresh_token", 86400);
+    ThreadedTokenRefresher tokenProvider = new ThreadedTokenRefresher.Builder()
+        .setClient(authClient)
+        .build();
+    tokenProvider.updateTokens(
+        "your_access_token",
+        "your_refresh_token",
+        Instant.now().plusSeconds(86400));
     PixivApiClient client = new PixivApiClient.Builder()
         .setTokenProvider(tokenProvider)
         .build();

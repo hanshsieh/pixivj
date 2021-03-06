@@ -2,7 +2,6 @@ package com.github.hanshsieh.pixivj.model;
 
 import com.github.hanshsieh.pixivj.util.JsonUtils;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

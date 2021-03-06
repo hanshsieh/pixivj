@@ -1,7 +1,6 @@
 package com.github.hanshsieh.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.time.LocalDate;
 
 public class RankedIllustsFilter {

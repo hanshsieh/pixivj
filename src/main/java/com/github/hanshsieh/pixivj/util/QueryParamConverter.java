@@ -1,12 +1,10 @@
 package com.github.hanshsieh.pixivj.util;
 
-import com.github.hanshsieh.pixivj.util.JsonUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.Map;
 import okhttp3.HttpUrl;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.Map;
 
 public class QueryParamConverter {
 

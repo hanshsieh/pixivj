@@ -1,8 +1,7 @@
 package com.github.hanshsieh.pixivj.model;
 
-import com.google.gson.annotations.SerializedName;
 import com.github.hanshsieh.pixivj.util.JsonUtils;
-
+import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class IllustDetail {
