@@ -14,9 +14,34 @@ Currently, only a small subset of the APIs are implemented.
 > and refresh token from the responses. Then, you can manually feed the tokens into the library.
 
 # Usage
-
+Add dependency to your project.  
+Checkout [here](https://mvnrepository.com/artifact/com.github.hanshsieh/pixivj).  
+If you want to try out snapshot versions, see [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/hanshsieh/pixivj/) for the available versions.  
+You can allow your project to pull snapshot versions by adding the following profile to your `pom.xml` (for Maven)
+```xml
+<project>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <repositories>
+                <repository>
+                    <id>snapshots-repo</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                    <releases><enabled>false</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+</project>
+```
+Then, you can compile your project with
+```bash
+mvn package -Pdev
+```
+Here's the sample code:
 ```java
-package com.github.hanshsieh.pixivj;
 import com.github.hanshsieh.pixivj.api.PixivApiClient;
 import com.github.hanshsieh.pixivj.model.FilterMode;
 import com.github.hanshsieh.pixivj.model.FilterType;
