@@ -58,8 +58,8 @@ public class ThreadedTokenRefresherTest {
   @DisplayName("Constructor will create a single thread executor")
   public void testConstructor(@Injectable Runnable runnable) {
     tokenProvider = new ThreadedTokenRefresher.Builder()
-      .setAuthClient(client)
-      .build();
+        .setAuthClient(client)
+        .build();
     List<ThreadFactory> threadFactories = new ArrayList<>();
     new Verifications() {{
       ThreadFactory threadFactory;
@@ -78,10 +78,10 @@ public class ThreadedTokenRefresherTest {
   public void testConstructWithInvalidDelayPercentage(double delayPercentage) {
     assertThrows(IllegalArgumentException.class,
         () -> new ThreadedTokenRefresher.Builder()
-      .setAuthClient(client)
-      .setDelayPercentage(delayPercentage)
-      .setRetryDelay(Duration.ofSeconds(10))
-      .build());
+            .setAuthClient(client)
+            .setDelayPercentage(delayPercentage)
+            .setRetryDelay(Duration.ofSeconds(10))
+            .build());
   }
 
   @ParameterizedTest(name = "Delay percentage {0} is valid")
@@ -90,18 +90,18 @@ public class ThreadedTokenRefresherTest {
   public void testConstructWithValidDelayPercentage(double delayPercentage) {
     assertDoesNotThrow(
         () -> new ThreadedTokenRefresher.Builder()
-      .setAuthClient(client)
-      .setDelayPercentage(delayPercentage)
-      .setRetryDelay(Duration.ofSeconds(10))
-      .build());
+            .setAuthClient(client)
+            .setDelayPercentage(delayPercentage)
+            .setRetryDelay(Duration.ofSeconds(10))
+            .build());
   }
 
   @Test
   @DisplayName("Set tokens and schedule for refresh")
   public void testSetTokens() throws Exception {
     tokenProvider = new ThreadedTokenRefresher.Builder()
-      .setAuthClient(client)
-      .build();
+        .setAuthClient(client)
+        .build();
     new Expectations() {{
       executor.schedule(withInstanceOf(Runnable.class), anyLong, withInstanceOf(TimeUnit.class));
       returns(future1, future2, future3);
@@ -174,8 +174,8 @@ public class ThreadedTokenRefresherTest {
   @DisplayName("Close")
   public void testClose() {
     tokenProvider = new ThreadedTokenRefresher.Builder()
-      .setAuthClient(client)
-      .build();
+        .setAuthClient(client)
+        .build();
     tokenProvider.close();
     new Verifications() {{
       executor.shutdownNow();

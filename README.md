@@ -83,5 +83,5 @@ Follow the guide at [here](https://central.sonatype.org/pages/apache-maven.html)
 Update the version in `pom.xml` appropriately.  
 Then, run
 ```
-mvn clean deploy -P release
+mvn -Duser.name="$(git config --get user.name)" clean deploy -P release
 ```

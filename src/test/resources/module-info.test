@@ -1,0 +1,15 @@
+//
+// Patch, i.e. configure, Java module system at test-runtime
+// See https://github.com/sormuras/junit-platform-maven-plugin
+//
+
+--add-opens
+  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj=org.junit.platform.commons,jmockit
+--add-opens
+  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.token=jmockit
+--add-modules
+  // jmockit uses "sun.reflect.ReflectionFactory", which is in "jdk.unsupported" module
+  jdk.unsupported
+
+--add-reads
+  com.github.hanshsieh.pixivj=org.junit.jupiter.api
