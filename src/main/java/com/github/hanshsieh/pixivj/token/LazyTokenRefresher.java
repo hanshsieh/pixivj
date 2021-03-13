@@ -88,6 +88,12 @@ public class LazyTokenRefresher implements TokenRefresher {
   }
 
   @Override
+  public @NonNull String getRefreshToken() {
+    Validate.notNull(refreshToken, "Refresh token not set");
+    return refreshToken;
+  }
+
+  @Override
   public void close() {
 
   }

@@ -103,10 +103,18 @@ public class ThreadedTokenRefresher implements TokenRefresher {
     long expiryDelayMs = Math.max(0, expiryTime.toEpochMilli() - Instant.now().toEpochMilli());
     long refreshDelayMs = (long) Math.floor(expiryDelayMs * delayPercentage);
     replaceRefreshFuture(
-        executor.schedule(this::refreshToken, refreshDelayMs, TimeUnit.MILLISECONDS));
+        executor.schedule(this::refreshTokens, refreshDelayMs, TimeUnit.MILLISECONDS));
   }
 
-  private void refreshToken() {
+  @Override
+  public synchronized @NonNull String getRefreshToken() {
+    if (refreshToken == null) {
+      throw new IllegalStateException("Refresh token is not set");
+    }
+    return refreshToken;
+  }
+
+  private void refreshTokens() {
     try {
       Credential credential = new Credential();
       credential.setRefreshToken(this.refreshToken);
@@ -118,7 +126,7 @@ public class ThreadedTokenRefresher implements TokenRefresher {
     } catch (Exception ex) {
       logger.error("Failed to refresh token: ", ex);
       replaceRefreshFuture(
-          executor.schedule(this::refreshToken, retryDelay.toMillis(), TimeUnit.MILLISECONDS));
+          executor.schedule(this::refreshTokens, retryDelay.toMillis(), TimeUnit.MILLISECONDS));
     }
   }
 
@@ -137,7 +145,7 @@ public class ThreadedTokenRefresher implements TokenRefresher {
   @Override
   public synchronized @NonNull String getAccessToken() throws AuthException, IOException {
     if (accessToken == null) {
-      throw new IllegalStateException("Token is not set");
+      throw new IllegalStateException("Access token is not set");
     }
     if (expiryTime.isBefore(Instant.now())) {
       throw new IllegalStateException("Token has been expired at " + expiryTime);
