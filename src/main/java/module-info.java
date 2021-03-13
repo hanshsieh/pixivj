@@ -6,6 +6,7 @@ module com.github.hanshsieh.pixivj {
   requires kotlin.stdlib.common;
   requires okhttp3;
   requires com.google.gson;
+  opens com.github.hanshsieh.pixivj.model to com.google.gson;
   exports com.github.hanshsieh.pixivj.token;
   exports com.github.hanshsieh.pixivj.api;
   exports com.github.hanshsieh.pixivj.oauth;

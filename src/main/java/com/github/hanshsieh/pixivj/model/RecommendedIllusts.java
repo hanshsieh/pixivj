@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class RecommendIllusts {
+public class RecommendedIllusts {
 
   @SerializedName("illusts")
-  private List<Illustration> illusts = new ArrayList<Illustration>();
+  private List<Illustration> illusts = new ArrayList<>();
 
   @SerializedName("ranking_illusts")
   private List<Illustration> rankingIllusts = null;
@@ -97,7 +97,7 @@ public class RecommendIllusts {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RecommendIllusts recommendIllustrations = (RecommendIllusts) o;
+    RecommendedIllusts recommendIllustrations = (RecommendedIllusts) o;
     return Objects.equals(this.illusts, recommendIllustrations.illusts) &&
         Objects.equals(this.rankingIllusts, recommendIllustrations.rankingIllusts) &&
         Objects.equals(this.contestExists, recommendIllustrations.contestExists) &&
