@@ -5,6 +5,8 @@ import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
 import com.github.hanshsieh.pixivj.util.Header;
 import com.github.hanshsieh.pixivj.util.HexUtils;
+import com.github.hanshsieh.pixivj.util.IoUtils;
+import java.io.Closeable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -21,7 +23,7 @@ import org.apache.commons.lang3.Validate;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class PixivOAuthClient {
+public class PixivOAuthClient implements Closeable {
 
   public static class Builder {
 
@@ -110,5 +112,10 @@ public class PixivOAuthClient {
     } catch (NoSuchAlgorithmException ex) {
       throw new RuntimeException(ex);
     }
+  }
+
+  @Override
+  public void close() {
+    IoUtils.close(this.httpClient);
   }
 }
