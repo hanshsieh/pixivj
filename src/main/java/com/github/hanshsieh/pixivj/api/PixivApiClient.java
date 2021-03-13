@@ -5,7 +5,7 @@ import com.github.hanshsieh.pixivj.exception.PixivException;
 import com.github.hanshsieh.pixivj.model.IllustDetail;
 import com.github.hanshsieh.pixivj.model.RankedIllusts;
 import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
-import com.github.hanshsieh.pixivj.model.RecommendIllusts;
+import com.github.hanshsieh.pixivj.model.RecommendedIllusts;
 import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
 import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
@@ -98,9 +98,9 @@ public class PixivApiClient implements Closeable {
    * @throws IOException    IOException Error
    */
   @NonNull
-  public RecommendIllusts getRecommendedIllusts(@NonNull RecommendedIllustsFilter filter)
+  public RecommendedIllusts getRecommendedIllusts(@NonNull RecommendedIllustsFilter filter)
       throws PixivException, IOException {
-    return sendQueryRequest("v1/illust/recommended", filter, RecommendIllusts.class);
+    return sendQueryRequest("v1/illust/recommended", filter, RecommendedIllusts.class);
   }
 
   /**
