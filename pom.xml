@@ -6,7 +6,7 @@
 
   <groupId>com.github.hanshsieh</groupId>
   <artifactId>pixivj</artifactId>
-  <version>0.3.6-alpha-SNAPSHOT</version>
+  <version>1.0.0-beta</version>
   <packaging>jar</packaging>
 
   <name>pixivj</name>
