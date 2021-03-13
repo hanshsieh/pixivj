@@ -20,4 +20,11 @@ public interface TokenRefresher extends TokenProvider {
       @NonNull String accessToken,
       @NonNull String refreshToken,
       @NonNull Instant expiryTime);
+
+  /**
+   * Gets refresh token.
+   * @return The Access token
+   */
+  @NonNull
+  String getRefreshToken();
 }

@@ -6,7 +6,7 @@
 
   <groupId>com.github.hanshsieh</groupId>
   <artifactId>pixivj</artifactId>
-  <version>1.0.0-beta</version>
+  <version>1.1.0-beta-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>pixivj</name>
@@ -66,20 +66,11 @@
       <artifactId>slf4j-api</artifactId>
       <version>1.7.30</version>
     </dependency>
-    <!-- Only enable it for development -->
-    <!--<dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.7.30</version>
-      <scope>compile</scope>
-    </dependency>-->
-
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.11</version>
     </dependency>
-
     <dependency>
       <groupId>org.jmockit</groupId>
       <artifactId>jmockit</artifactId>
@@ -92,7 +83,6 @@
       <version>5.7.0</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <dependencyManagement>
@@ -189,7 +179,40 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>bintray</name>
+      <url>https://jcenter.bintray.com</url>
+    </repository>
+  </repositories>
   <profiles>
+    <profile>
+      <id>dev</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <repositories>
+        <repository>
+          <id>snapshots-repo</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+      </repositories>
+      <dependencies>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>1.7.30</version>
+          <scope>compile</scope>
+        </dependency>
+      </dependencies>
+      <properties>
+        <org.slf4j.simpleLogger.defaultLogLevel>debug</org.slf4j.simpleLogger.defaultLogLevel>
+      </properties>
+    </profile>
     <profile>
       <id>release</id>
       <build>

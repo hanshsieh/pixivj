@@ -1,19 +1,14 @@
-# PixivJ
+# Pixivj
 A java client for Pixiv.
 
 ![Java CI](https://github.com/hanshsieh/pixivj/workflows/Java%20CI/badge.svg)  
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.hanshsieh/pixivj.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.hanshsieh%22%20AND%20a:%22pixivj%22)  
 [Pixiv API doc](https://hanshsieh.github.io/pixiv-api-doc)
 
-Currently, only a small subset of the APIs are implemented.  
-> Notice: Because of the change of Pixiv authentication API, this library currently doesn't provide
-> a way to obtain the access token programically. The implementation is in progress. Please see the 
-> *Issues*.  
-> For now, you can manually go to the [login URL](https://app-api.pixiv.net/web/v1/login?code_challenge=F_reT3JvK8doGUKdrVR1rG8DV2iVpFTxQ-vEeZH8TVA&code_challenge_method=S256&client=pixiv-android),
-> open your browser's debug console, login your account. You should be able to find the access token
-> and refresh token from the responses. Then, you can manually feed the tokens into the library.
+Currently, only a small subset of the APIs are implemented.
 
 # Usage
+## Getting Started
 Add dependency to your project.  
 Checkout [here](https://mvnrepository.com/artifact/com.github.hanshsieh/pixivj).  
 If you want to try out snapshot versions, see [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/hanshsieh/pixivj/) for the available versions.  
@@ -36,66 +31,62 @@ You can allow your project to pull snapshot versions by adding the following pro
     </profiles>
 </project>
 ```
-Then, you can compile your project with
-```bash
-mvn package -Pdev
-```
-Here's the sample code:
+Here's a sample code:
 ```java
 import com.github.hanshsieh.pixivj.api.PixivApiClient;
-import com.github.hanshsieh.pixivj.model.FilterMode;
 import com.github.hanshsieh.pixivj.model.FilterType;
-import com.github.hanshsieh.pixivj.model.IllustDetail;
-import com.github.hanshsieh.pixivj.model.RankedIllusts;
-import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
-import com.github.hanshsieh.pixivj.model.RecommendIllusts;
-import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
-import com.github.hanshsieh.pixivj.model.SearchIllusts;
-import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
-import com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher;
-import java.time.Instant;
+import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
+import com.github.hanshsieh.pixivj.model.SearchTarget;
+import com.github.hanshsieh.pixivj.model.SearchedIllusts;
+import com.github.hanshsieh.pixivj.token.FixedTokenProvider;
 
-public class Main {
-  public static void main(String[] args) {
-    PixivOAuthClient authClient = new PixivOAuthClient.Builder().build();
-    ThreadedTokenRefresher tokenProvider = new ThreadedTokenRefresher.Builder()
-        .setAuthClient(authClient)
-        .build();
-    tokenProvider.updateTokens(
-        "your_access_token",
-        "your_refresh_token",
-        Instant.now().plusSeconds(86400));
+public class Demo {
+  public static void main(String[] args) throws Exception {
+    FixedTokenProvider tokenProvider =
+        new FixedTokenProvider("your_access_token");
     PixivApiClient client = new PixivApiClient.Builder()
         .setTokenProvider(tokenProvider)
         .build();
-    try {
-      // Searches for the illustration.
-      SearchIllusts illusts = client.searchIllusts("yuri", 0);
-
-      // Print out all the illustration's large image urls.
-      illusts.getIllusts().forEach(illustration -> System.out.println(illustration.getImageUrls().getLarge()));
-      RankedIllustsFilter filter = new RankedIllustsFilter();
-      filter.setMode(FilterMode.DAY_MALE);
-      filter.setFilter(FilterType.FOR_ANDROID);
-      filter.setOffset(0);
-      RankedIllusts rankedIllusts = client.getRankedIllusts(filter);
-      System.out.println(rankedIllusts);
-
-      // Recommended Illustrations
-      RecommendedIllustsFilter recommendedIllustsFilter = new RecommendedIllustsFilter();
-      recommendedIllustsFilter.setFilter(FilterType.FOR_IOS);
-      recommendedIllustsFilter.setIncludePrivacyPolicy(true);
-      recommendedIllustsFilter.setOffset(0);
-      RecommendIllusts recommendedIllusts = client.getRecommendedIllusts(recommendedIllustsFilter);
-      System.out.println(recommendedIllusts);
-      IllustDetail detail = client.getIllustDetail(recommendedIllusts.getIllusts().get(0).getId());
-      System.out.println(detail);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
+    SearchIllustsFilter searchIllustFilter = new SearchIllustsFilter();
+    searchIllustFilter.setFilter(FilterType.FOR_ANDROID);
+    searchIllustFilter.setIncludeTranslatedTagResults(true);
+    searchIllustFilter.setMergePlainKeywordResults(true);
+    searchIllustFilter.setOffset(0);
+    searchIllustFilter.setSearchTarget(SearchTarget.PARTIAL_MATCH_FOR_TAGS);
+    searchIllustFilter.setWord("swimsuit");
+    SearchedIllusts searchedIllusts = client.searchIllusts(searchIllustFilter);
+    System.out.println(searchedIllusts);
   }
 }
 ```
+The example code assumes that you can get the access token from somewhere.    
+Since 2021/02/08, Pixiv no longer supports logging in with username/password by calling its
+RESTful API. To login, user must login via its web interface.   
+For desktop computers, checkout [pixivj-jfx](https://github.com/hanshsieh/pixivj-jfx), which
+displays a web view using JavaFX.  
+Then, you can compile your project with
+```bash
+mvn package
+```
+## Authentication
+Pixiv has two set of RESTful APIs.  
+One is under the URL `https://app-api.pixiv.net`. It's used, for example, getting illustrations.
+Most of the time, you will use the APIs under this URL. It's implemented by 
+`com.github.hanshsieh.pixivj.api.PixivApiClient`.  
+Another one is under the URL `https://oauth.secure.pixiv.net`. It's used for doing authentication.
+It's implemented by `com.github.hanshsieh.pixivj.api.PixivOAuthClient`.  
+After authentication is completed, you can obtain two tokens:
+- Access token
+  A short-lived token. You need this token when calling the APIs under `https://app-api.pixiv.net`. 
+- Refresh token
+  Its lifetime is longer. You can use this token to get a new access token and refresh token.
+
+## Refreshing Access Token
+If you have a refresh token you can use it to refresh the access token.  
+There're some implementations that help you refresh the access tokens. Checkout the classes that
+implements `com.github.hanshsieh.pixivj.token.TokenRefresher`.  
+For example, `com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher` will refresh the access
+token periodically in a background thread.
 
 # Contribution
 ## Style

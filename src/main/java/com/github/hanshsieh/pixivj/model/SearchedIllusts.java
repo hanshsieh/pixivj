@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SearchIllusts {
+public class SearchedIllusts {
 
   @SerializedName("illusts")
   private List<Illustration> illusts = new ArrayList<>();
 
   @SerializedName("next_url")
   private String nextUrl = null;
+
+  @SerializedName("search_span_limit")
+  private Integer searchSpanLimit;
 
   /**
    * Get illusts
@@ -48,9 +51,17 @@ public class SearchIllusts {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SearchIllusts that = (SearchIllusts) o;
+    SearchedIllusts that = (SearchedIllusts) o;
     return Objects.equals(getIllusts(), that.getIllusts()) &&
         Objects.equals(getNextUrl(), that.getNextUrl());
+  }
+
+  public Integer getSearchSpanLimit() {
+    return searchSpanLimit;
+  }
+
+  public void setSearchSpanLimit(Integer searchSpanLimit) {
+    this.searchSpanLimit = searchSpanLimit;
   }
 
   @Override
