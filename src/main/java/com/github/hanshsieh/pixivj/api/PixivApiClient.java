@@ -7,7 +7,8 @@ import com.github.hanshsieh.pixivj.model.RankedIllusts;
 import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.RecommendIllusts;
 import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
-import com.github.hanshsieh.pixivj.model.SearchIllusts;
+import com.github.hanshsieh.pixivj.model.SearchedIllusts;
+import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
 import com.github.hanshsieh.pixivj.util.Header;
 import com.github.hanshsieh.pixivj.util.QueryParamConverter;
@@ -102,22 +103,17 @@ public class PixivApiClient implements Closeable {
   }
 
   /**
-   * Searches illustrations from Pixiv.
+   * Searches illustrations.
    *
-   * @param tag the tag to search.
+   * @param filter The filter to use.
    * @return Search Illustration Results.
    * @throws PixivException PixivException Error
    * @throws IOException    IOException Error
    */
   @NonNull
-  public SearchIllusts searchIllusts(@NonNull String tag, int offset)
+  public SearchedIllusts searchIllusts(@NonNull SearchIllustsFilter filter)
       throws PixivException, IOException {
-    HttpUrl url = baseUrl.newBuilder().addEncodedPathSegments("v1/search/illust")
-        .addQueryParameter("search_target", "partial_match_for_tags")
-        .addQueryParameter("sort", "date_desc")
-        .addQueryParameter("word", tag).addQueryParameter("offset", String.valueOf(offset)).build();
-    Request request = createApiReqBuilder().url(url).get().build();
-    return requestSender.send(request, SearchIllusts.class);
+    return sendQueryRequest("v1/search/illust", filter, SearchedIllusts.class);
   }
 
   /**

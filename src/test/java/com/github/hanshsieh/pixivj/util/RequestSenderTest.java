@@ -1,10 +1,9 @@
-package com.github.hanshsieh.pixivj;
+package com.github.hanshsieh.pixivj.util;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.hanshsieh.pixivj.util.RequestSender;
 import mockit.Expectations;
 import mockit.Injectable;
 import okhttp3.*;
@@ -48,7 +47,7 @@ class RequestSenderTest {
       result = responseBody;
       minTimes = 0;
     }};
-    requestSender = new RequestSender<RuntimeException>(httpClient) {
+    requestSender = new RequestSender<>(httpClient) {
       @Override
       protected RuntimeException createExceptionFromRespBody(@NonNull String respStr) {
         return new RuntimeException(respStr);
