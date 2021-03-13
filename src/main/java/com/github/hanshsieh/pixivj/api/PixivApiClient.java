@@ -11,6 +11,7 @@ import com.github.hanshsieh.pixivj.model.SearchedIllusts;
 import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
 import com.github.hanshsieh.pixivj.util.Header;
+import com.github.hanshsieh.pixivj.util.IoUtils;
 import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import java.io.Closeable;
 import java.io.IOException;
@@ -160,7 +161,6 @@ public class PixivApiClient implements Closeable {
   @Override
   public void close() throws IOException {
     this.tokenProvider.close();
-    this.httpClient.dispatcher().executorService().shutdown();
-    this.httpClient.connectionPool().evictAll();
+    IoUtils.close(this.httpClient);
   }
 }
