@@ -1,10 +1,24 @@
 package com.github.hanshsieh.pixivj.token;
 
-import com.github.hanshsieh.pixivj.model.GrantType;
-import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
+import com.github.hanshsieh.pixivj.model.GrantType;
+import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mock;
@@ -16,14 +30,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ThreadedTokenRefresherTest {
 

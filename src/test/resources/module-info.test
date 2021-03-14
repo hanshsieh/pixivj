@@ -6,9 +6,15 @@
 --add-opens
   com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj=org.junit.platform.commons,jmockit
 --add-opens
-  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.util=org.junit.platform.commons,jmockit
+  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.adapter=org.junit.platform.commons,jmockit
+--add-opens
+  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.api=org.junit.platform.commons,jmockit
+--add-opens
+  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.model=org.junit.platform.commons,jmockit
 --add-opens
   com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.token=org.junit.platform.commons,jmockit
+--add-opens
+  com.github.hanshsieh.pixivj/com.github.hanshsieh.pixivj.util=org.junit.platform.commons,jmockit
 --add-modules
   // jmockit uses "sun.reflect.ReflectionFactory", which is in "jdk.unsupported" module
   jdk.unsupported

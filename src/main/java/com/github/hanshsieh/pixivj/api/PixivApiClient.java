@@ -10,7 +10,7 @@ import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
 import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
-import com.github.hanshsieh.pixivj.util.Header;
+import com.github.hanshsieh.pixivj.http.Header;
 import com.github.hanshsieh.pixivj.util.IoUtils;
 import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import java.io.Closeable;
@@ -21,32 +21,62 @@ import okhttp3.Request;
 import org.apache.commons.lang3.Validate;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+
+/**
+ * Client for Pixiv API.
+ */
 public class PixivApiClient implements Closeable {
 
+  /**
+   * Builder for {@link PixivApiClient}.
+   */
   public static class Builder {
-
-    private String baseUrl = "https://app-api.pixiv.net";
+    public static final String DEFAULT_BASE_URL = "https://app-api.pixiv.net";
+    private String baseUrl = DEFAULT_BASE_URL;
     private String userAgent = Header.USER_AGENT_ANDROID;
     private TokenProvider tokenProvider = null;
 
+    /**
+     * Sets the base URL of the service.
+     * Default: {@link #DEFAULT_BASE_URL}.
+     * @param baseUrl Base URL.
+     * @return This instance.
+     */
     @NonNull
     public Builder setBaseUrl(@NonNull String baseUrl) {
       this.baseUrl = baseUrl;
       return this;
     }
 
+    /**
+     * Sets the user agent used when sending requests.
+     * Default: {@link Header#USER_AGENT_ANDROID}
+     * @param userAgent User agent.
+     * @return This instance.
+     */
     @NonNull
     public Builder setUserAgent(@NonNull String userAgent) {
       this.userAgent = userAgent;
       return this;
     }
 
+    /**
+     * Sets the provider for the access token.
+     * The created {@link PixivApiClient} will take ownership of the token provider, which means
+     * when the {@link PixivApiClient} is closed, the token provider will also be closed.
+     * @param tokenProvider Token provider.
+     * @return This instance.
+     */
     @NonNull
     public Builder setTokenProvider(@NonNull TokenProvider tokenProvider) {
       this.tokenProvider = tokenProvider;
       return this;
     }
 
+    /**
+     * Builds the {@link PixivApiClient} instance.
+     * @return Built instance.
+     */
     @NonNull
     public PixivApiClient build() {
       return new PixivApiClient(this);
@@ -86,7 +116,7 @@ public class PixivApiClient implements Closeable {
   @NonNull
   public RankedIllusts getRankedIllusts(@NonNull RankedIllustsFilter filter)
       throws PixivException, IOException {
-    return sendQueryRequest("v1/illust/ranking", filter, RankedIllusts.class);
+    return sendGetRequest("v1/illust/ranking", filter, RankedIllusts.class);
   }
 
   /**
@@ -100,7 +130,7 @@ public class PixivApiClient implements Closeable {
   @NonNull
   public RecommendedIllusts getRecommendedIllusts(@NonNull RecommendedIllustsFilter filter)
       throws PixivException, IOException {
-    return sendQueryRequest("v1/illust/recommended", filter, RecommendedIllusts.class);
+    return sendGetRequest("v1/illust/recommended", filter, RecommendedIllusts.class);
   }
 
   /**
@@ -114,7 +144,7 @@ public class PixivApiClient implements Closeable {
   @NonNull
   public SearchedIllusts searchIllusts(@NonNull SearchIllustsFilter filter)
       throws PixivException, IOException {
-    return sendQueryRequest("v1/search/illust", filter, SearchedIllusts.class);
+    return sendGetRequest("v1/search/illust", filter, SearchedIllusts.class);
   }
 
   /**
@@ -138,7 +168,18 @@ public class PixivApiClient implements Closeable {
     return requestSender.send(request, IllustDetail.class);
   }
 
-  private <T, F> T sendQueryRequest(@NonNull String path, @NonNull F filter, Class<T> respType)
+  /**
+   * Sends a HTTP GET request.
+   * @param path The relative URL path.
+   * @param filter The filter to used to generate the query parameters.
+   * @param respType Type of the response.
+   * @param <T> Type of the serialized response.
+   * @param <F> Type of the filter.
+   * @return Serialized response.
+   * @throws PixivException The server returns an error.
+   * @throws IOException IO error.
+   */
+  private <T, F> T sendGetRequest(@NonNull String path, @NonNull F filter, Class<T> respType)
       throws PixivException, IOException {
     HttpUrl.Builder urlBuilder = baseUrl.newBuilder()
         .addEncodedPathSegments(path);
@@ -152,12 +193,22 @@ public class PixivApiClient implements Closeable {
     return requestSender.send(request, respType);
   }
 
+  /**
+   * Creates an API request builder.
+   * @return Created API request builder.
+   * @throws AuthException Authentication error when obtaining the access token.
+   * @throws IOException IO error.
+   */
   private Request.@NonNull Builder createApiReqBuilder() throws AuthException, IOException {
     return new Request.Builder()
         .header("User-Agent", userAgent)
         .header("Authorization", "Bearer " + tokenProvider.getAccessToken());
   }
 
+  /**
+   * Closes the client and release the resources.
+   * @throws IOException IO error.
+   */
   @Override
   public void close() throws IOException {
     this.tokenProvider.close();
