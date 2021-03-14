@@ -1,15 +1,18 @@
 package com.github.hanshsieh.pixivj.token;
 
-import com.github.hanshsieh.pixivj.model.GrantType;
-import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
-import mockit.*;
-import org.junit.jupiter.api.Test;
-
+import com.github.hanshsieh.pixivj.model.GrantType;
+import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
 import java.time.Instant;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Verifications;
+import org.junit.jupiter.api.Test;
 
 public class LazyTokenRefresherTest {
 

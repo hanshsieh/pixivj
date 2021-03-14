@@ -12,4 +12,5 @@ module com.github.hanshsieh.pixivj {
   exports com.github.hanshsieh.pixivj.oauth;
   exports com.github.hanshsieh.pixivj.model;
   exports com.github.hanshsieh.pixivj.exception;
+  exports com.github.hanshsieh.pixivj.http;
 }

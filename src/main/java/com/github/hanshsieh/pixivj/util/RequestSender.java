@@ -46,6 +46,7 @@ public abstract class RequestSender<E extends Exception> {
       assert respBody != null;
       String respBodyStr = respBody.string();
       logger.debug("Got response status code {}", response.code());
+      // Status code not in [200, 300)
       if (!response.isSuccessful()) {
         throw createExceptionFromRespBody(respBodyStr);
       } else {
