@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The illustrations found by search.
+ */
 public class SearchedIllusts {
 
   @SerializedName("illusts")
@@ -18,14 +21,18 @@ public class SearchedIllusts {
   private Integer searchSpanLimit;
 
   /**
-   * Get illusts
+   * Get illustrations.
    *
-   * @return illusts
+   * @return Illustrations.
    **/
   public List<Illustration> getIllusts() {
     return illusts;
   }
 
+  /**
+   * Sets illustrations.
+   * @param illusts Illustrations.
+   */
   public void setIllusts(List<Illustration> illusts) {
     this.illusts = illusts;
   }
@@ -33,27 +40,18 @@ public class SearchedIllusts {
   /**
    * The next URL that can be used for querying the next page, if any.
    *
-   * @return nextUrl
+   * @return Next URL.
    **/
   public String getNextUrl() {
     return nextUrl;
   }
 
+  /**
+   * Sets next URL that can be used for querying the next page, if any.
+   * @param nextUrl Next URL.
+   */
   public void setNextUrl(String nextUrl) {
     this.nextUrl = nextUrl;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    SearchedIllusts that = (SearchedIllusts) o;
-    return Objects.equals(getIllusts(), that.getIllusts()) &&
-        Objects.equals(getNextUrl(), that.getNextUrl());
   }
 
   public Integer getSearchSpanLimit() {
@@ -65,13 +63,29 @@ public class SearchedIllusts {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    SearchedIllusts that = (SearchedIllusts) o;
+    return Objects.equals(illusts, that.illusts) &&
+        Objects.equals(nextUrl, that.nextUrl) &&
+        Objects.equals(searchSpanLimit, that.searchSpanLimit);
+  }
+
+  @Override
   public int hashCode() {
-    return Objects.hash(getIllusts(), getNextUrl());
+    return Objects.hash(
+        illusts,
+        nextUrl,
+        searchSpanLimit);
   }
 
   @Override
   public String toString() {
     return JsonUtils.GSON.toJson(this);
   }
-
 }
