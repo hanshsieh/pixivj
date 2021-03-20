@@ -1,5 +1,6 @@
 package com.github.hanshsieh.pixivj.model;
 
+import com.github.hanshsieh.pixivj.util.JsonUtils;
 import com.google.gson.annotations.SerializedName;
 
 public class AuthError {
@@ -23,5 +24,10 @@ public class AuthError {
 
   public void setDetails(AuthErrorDetails details) {
     this.details = details;
+  }
+
+  @Override
+  public String toString() {
+    return JsonUtils.GSON.toJson(this);
   }
 }

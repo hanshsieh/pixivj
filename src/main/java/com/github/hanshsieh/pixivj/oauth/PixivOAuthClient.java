@@ -80,8 +80,6 @@ public class PixivOAuthClient implements Closeable {
     addFormFieldIfNotNull(bodyBuilder, "client_id", credential.getClientId());
     addFormFieldIfNotNull(bodyBuilder, "client_secret", credential.getClientSecret());
     addFormFieldIfNotNull(bodyBuilder, "grant_type", credential.getGrantType());
-    addFormFieldIfNotNull(bodyBuilder, "username", credential.getUsername());
-    addFormFieldIfNotNull(bodyBuilder, "password", credential.getPassword());
     addFormFieldIfNotNull(bodyBuilder, "refresh_token", credential.getRefreshToken());
     addFormFieldIfNotNull(bodyBuilder, "code", credential.getCode());
     addFormFieldIfNotNull(bodyBuilder, "code_verifier", credential.getCodeVerifier());

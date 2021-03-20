@@ -11,8 +11,6 @@ public class Credential {
   private String clientId = CLIENT_ID_MOBILE;
   private String clientSecret = CLIENT_SECRET_MOBILE;
   private GrantType grantType = GrantType.REFRESH_TOKEN;
-  private String username;
-  private String password;
   private String refreshToken;
   private String codeVerifier;
   private String code;
@@ -143,42 +141,6 @@ public class Credential {
   }
 
   /**
-   * Gets username. It's required when the grant type is "password".
-   *
-   * @return Username.
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * Sets username. It's required when the grant type is "password".
-   *
-   * @param username Username.
-   */
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  /**
-   * Gets password.
-   *
-   * @return Password.
-   */
-  public String getPassword() {
-    return password;
-  }
-
-  /**
-   * Sets password. It's required when the grant type is "password".
-   *
-   * @param password Password.
-   */
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  /**
    * Gets refresh token.
    *
    * @return Refresh token.
@@ -223,8 +185,6 @@ public class Credential {
     return Objects.equals(clientId, that.clientId) &&
         Objects.equals(clientSecret, that.clientSecret) &&
         Objects.equals(grantType, that.grantType) &&
-        Objects.equals(username, that.username) &&
-        Objects.equals(password, that.password) &&
         Objects.equals(refreshToken, that.refreshToken) &&
         Objects.equals(hashSecret, that.hashSecret) &&
         Objects.equals(codeVerifier, that.codeVerifier) &&
@@ -239,8 +199,6 @@ public class Credential {
         clientId,
         clientSecret,
         grantType,
-        username,
-        password,
         refreshToken,
         hashSecret,
         codeVerifier,
