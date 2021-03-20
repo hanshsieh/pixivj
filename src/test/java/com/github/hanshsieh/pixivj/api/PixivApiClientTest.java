@@ -2,6 +2,8 @@ package com.github.hanshsieh.pixivj.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.hanshsieh.pixivj.exception.APIException;
+import com.github.hanshsieh.pixivj.exception.PixivException;
 import com.github.hanshsieh.pixivj.model.FilterMode;
 import com.github.hanshsieh.pixivj.model.FilterType;
 import com.github.hanshsieh.pixivj.model.IllustDetail;
@@ -225,5 +227,30 @@ public class PixivApiClientTest {
       assertEquals("Bearer test access token", request.header("Authorization"));
     }};
     assertEquals(58840323, detail.getIllust().getId());
+  }
+  @Test
+  @DisplayName("Get illustration detail and get 500")
+  public void testGetIllustDetailAndGet500() throws Exception {
+    new Expectations() {{
+      response.isSuccessful();
+      result = false;
+
+      responseBody.string();
+      result = "{\n"
+          + "  \"error\": {\n"
+          + "    \"user_message\": \"test user message\",\n"
+          + "    \"message\": \"test message\",\n"
+          + "    \"reason\": \"test reason\",\n"
+          + "    \"user_message_details\": \"{}\"\n"
+          + "  }\n"
+          + "}";
+    }};
+    try {
+      client.getIllustDetail(100);
+      throw new Exception("Expecting exception");
+    } catch (APIException ex) {
+      assertEquals("test user message", ex.getError().getError().getUserMessage());
+      assertEquals("test message", ex.getError().getError().getMessage());
+    }
   }
 }
