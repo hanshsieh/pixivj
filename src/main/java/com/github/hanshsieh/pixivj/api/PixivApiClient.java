@@ -8,7 +8,7 @@ import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.RecommendedIllusts;
 import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
-import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
+import com.github.hanshsieh.pixivj.model.SearchedIllustsFilter;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
 import com.github.hanshsieh.pixivj.http.Header;
 import com.github.hanshsieh.pixivj.util.IoUtils;
@@ -142,7 +142,7 @@ public class PixivApiClient implements Closeable {
    * @throws IOException    IOException Error
    */
   @NonNull
-  public SearchedIllusts searchIllusts(@NonNull SearchIllustsFilter filter)
+  public SearchedIllusts searchIllusts(@NonNull SearchedIllustsFilter filter)
       throws PixivException, IOException {
     return sendGetRequest("v1/search/illust", filter, SearchedIllusts.class);
   }

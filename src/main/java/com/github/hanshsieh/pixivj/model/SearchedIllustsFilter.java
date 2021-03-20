@@ -2,7 +2,7 @@ package com.github.hanshsieh.pixivj.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SearchIllustsFilter {
+public class SearchedIllustsFilter {
   public static final String SORT_DATE_ASC = "date_asc";
   public static final String SORT_DATE_DESC = "date_desc";
   @SerializedName("filter")

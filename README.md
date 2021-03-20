@@ -35,7 +35,7 @@ Here's a sample code:
 ```java
 import com.github.hanshsieh.pixivj.api.PixivApiClient;
 import com.github.hanshsieh.pixivj.model.FilterType;
-import com.github.hanshsieh.pixivj.model.SearchIllustsFilter;
+import com.github.hanshsieh.pixivj.model.SearchedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchTarget;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
 import com.github.hanshsieh.pixivj.token.FixedTokenProvider;
@@ -47,7 +47,7 @@ public class Demo {
     PixivApiClient client = new PixivApiClient.Builder()
         .setTokenProvider(tokenProvider)
         .build();
-    SearchIllustsFilter searchIllustFilter = new SearchIllustsFilter();
+    SearchedIllustsFilter searchIllustFilter = new SearchedIllustsFilter();
     searchIllustFilter.setFilter(FilterType.FOR_ANDROID);
     searchIllustFilter.setIncludeTranslatedTagResults(true);
     searchIllustFilter.setMergePlainKeywordResults(true);
