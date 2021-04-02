@@ -20,11 +20,11 @@ public class RankedIllusts {
    *
    * @return illusts
    **/
-  public List<Illustration> getIllustrations() {
+  public List<Illustration> getIllusts() {
     return illusts;
   }
 
-  public void setIllustrations(List<Illustration> illusts) {
+  public void setIllusts(List<Illustration> illusts) {
     this.illusts = illusts;
   }
 
