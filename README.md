@@ -35,35 +35,84 @@ Here's a sample code:
 ```java
 import com.github.hanshsieh.pixivj.api.PixivApiClient;
 import com.github.hanshsieh.pixivj.model.FilterType;
-import com.github.hanshsieh.pixivj.model.SearchedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchTarget;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
-import com.github.hanshsieh.pixivj.token.FixedTokenProvider;
+import com.github.hanshsieh.pixivj.model.SearchedIllustsFilter;
+import com.github.hanshsieh.pixivj.oauth.PixivOAuthClient;
+import com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher;
+import com.github.hanshsieh.pixivj.token.TokenRefresher;
+import com.github.hanshsieh.pixivjjfx.stage.PixivLoginStage;
+import java.io.Closeable;
+import javafx.application.Application;
+import javafx.stage.Stage;
+public class Test extends Application {
+  @Override
+  public void start(Stage primaryStage) {
+    // Simulate a worker thread
+    new Thread(() -> {
+      PixivOAuthClient authClient = null;
+      TokenRefresher tokenRefresher = null;
+      PixivLoginStage loginStage;
+      try {
+        authClient = new PixivOAuthClient.Builder().build();
+        tokenRefresher = new ThreadedTokenRefresher.Builder()
+            .setAuthClient(authClient)
+            .build();
+        loginStage = new PixivLoginStage.Builder().buildInFxThread();
+        WebViewTokenProvider tokenProvider = new WebViewTokenProvider.Builder()
+            .setAuthClient(authClient)
+            .setTokenRefresher(tokenRefresher)
+            .setLoginStage(loginStage)
+            .build();
+        PixivApiClient client = new PixivApiClient.Builder()
+            .setTokenProvider(tokenProvider)
+            .build();
+        SearchedIllustsFilter searchIllustFilter = new SearchedIllustsFilter();
+        searchIllustFilter.setFilter(FilterType.FOR_ANDROID);
+        searchIllustFilter.setIncludeTranslatedTagResults(true);
+        searchIllustFilter.setMergePlainKeywordResults(true);
+        searchIllustFilter.setOffset(0);
+        searchIllustFilter.setSearchTarget(SearchTarget.PARTIAL_MATCH_FOR_TAGS);
+        searchIllustFilter.setWord("swimsuit");
+        SearchedIllusts searchedIllusts = client.searchIllusts(searchIllustFilter);
+        System.out.println(searchedIllusts);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      } finally {
+        closeQuietly(authClient);
+        closeQuietly(tokenRefresher);
+      }
+    }).start();
+  }
 
-public class Demo {
-  public static void main(String[] args) throws Exception {
-    FixedTokenProvider tokenProvider =
-        new FixedTokenProvider("your_access_token");
-    PixivApiClient client = new PixivApiClient.Builder()
-        .setTokenProvider(tokenProvider)
-        .build();
-    SearchedIllustsFilter searchIllustFilter = new SearchedIllustsFilter();
-    searchIllustFilter.setFilter(FilterType.FOR_ANDROID);
-    searchIllustFilter.setIncludeTranslatedTagResults(true);
-    searchIllustFilter.setMergePlainKeywordResults(true);
-    searchIllustFilter.setOffset(0);
-    searchIllustFilter.setSearchTarget(SearchTarget.PARTIAL_MATCH_FOR_TAGS);
-    searchIllustFilter.setWord("swimsuit");
-    SearchedIllusts searchedIllusts = client.searchIllusts(searchIllustFilter);
-    System.out.println(searchedIllusts);
+  private static void closeQuietly(Closeable closeable) {
+    if (closeable == null) {
+      return;
+    }
+    try {
+      closeable.close();
+    } catch (Exception ex) {
+      // Do nothing
+    }
+  }
+
+  public static void main(String[] args) {
+    launch();
   }
 }
 ```
-The example code assumes that you can get the access token from somewhere.    
-Since 2021/02/08, Pixiv no longer supports logging in with username/password by calling its
-RESTful API. To login, user must login via its web interface.   
-For desktop computers, checkout [pixivj-jfx](https://github.com/hanshsieh/pixivj-jfx), which
-displays a web view using JavaFX.  
+`com.github.hanshsieh.pixivj.api.PixivApiClient` requires an implementation of 
+`com.github.hanshsieh.pixivj.token.TokenProvider` to obtain an access token, which is 
+required to access the Pixiv API. Here, `com.github.hanshsieh.pixivjjfx.token.WebViewTokenProvider` is used. 
+It displays a web view using JavaFX, lets the user login, and obtains an access
+token and a refresh token. The tokens are then fed into `com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher`,
+which automatically refreshes the access token using the refresh token in the background.  
+Notice that `WebViewTokenProvider` isn't provided in this artifact. To use it, checkout
+[pixivj-jfx](https://github.com/hanshsieh/pixivj-jfx).  
+
+> Since 2021/02/08, Pixiv no longer supports logging in with username/password by calling its
+> RESTful API. To login, user must login via its web interface.   
+
 Then, you can compile your project with
 ```bash
 mvn package
