@@ -3,6 +3,7 @@ package com.github.hanshsieh.pixivj.util;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Map;
+import java.util.Set;
 import okhttp3.HttpUrl;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -25,6 +26,25 @@ public class QueryParamConverter {
       if (entry.getValue() != null) {
         urlBuilder.addQueryParameter(entry.getKey(), entry.getValue().getAsString());
       }
+    }
+  }
+
+  public <T> T fromQueryParams(@NonNull String url, @NonNull Class<T> targetType) throws IllegalArgumentException {
+    try {
+      HttpUrl parsedUrl = HttpUrl.parse(url);
+      if (parsedUrl == null) {
+        throw new IllegalArgumentException("Failed to parse URL " + url);
+      }
+      Set<String> names = parsedUrl.queryParameterNames();
+      JsonObject jsonObj = new JsonObject();
+      for (String name : names) {
+        jsonObj.addProperty(name, parsedUrl.queryParameter(name));
+      }
+      return JsonUtils.GSON.fromJson(jsonObj, targetType);
+    } catch (IllegalArgumentException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new IllegalArgumentException("Failed to convert query parameters to the object", ex);
     }
   }
 }

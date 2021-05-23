@@ -1,6 +1,8 @@
 package com.github.hanshsieh.pixivj.model;
 
+import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import com.google.gson.annotations.SerializedName;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class SearchedIllustsFilter {
   public static final String SORT_DATE_ASC = "date_asc";
@@ -89,5 +91,11 @@ public class SearchedIllustsFilter {
 
   public void setSearchTarget(SearchTarget searchTarget) {
     this.searchTarget = searchTarget;
+  }
+
+  @NonNull
+  public static SearchedIllustsFilter fromUrl(@NonNull String url) throws IllegalArgumentException {
+    return new QueryParamConverter()
+        .fromQueryParams(url, SearchedIllustsFilter.class);
   }
 }

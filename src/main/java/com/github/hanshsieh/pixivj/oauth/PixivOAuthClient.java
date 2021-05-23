@@ -1,9 +1,9 @@
 package com.github.hanshsieh.pixivj.oauth;
 
 import com.github.hanshsieh.pixivj.exception.AuthException;
+import com.github.hanshsieh.pixivj.http.Header;
 import com.github.hanshsieh.pixivj.model.AuthResult;
 import com.github.hanshsieh.pixivj.model.Credential;
-import com.github.hanshsieh.pixivj.http.Header;
 import com.github.hanshsieh.pixivj.util.HexUtils;
 import com.github.hanshsieh.pixivj.util.IoUtils;
 import java.io.Closeable;

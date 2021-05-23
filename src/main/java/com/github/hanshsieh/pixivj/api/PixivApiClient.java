@@ -1,8 +1,12 @@
 package com.github.hanshsieh.pixivj.api;
 
-import com.github.hanshsieh.pixivj.exception.APIException;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.exception.PixivException;
+import com.github.hanshsieh.pixivj.http.Header;
+import com.github.hanshsieh.pixivj.model.AddBookmark;
+import com.github.hanshsieh.pixivj.model.AddBookmarkResult;
+import com.github.hanshsieh.pixivj.model.Comments;
+import com.github.hanshsieh.pixivj.model.IllustCommentsFilter;
 import com.github.hanshsieh.pixivj.model.IllustDetail;
 import com.github.hanshsieh.pixivj.model.RankedIllusts;
 import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
@@ -11,17 +15,16 @@ import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
 import com.github.hanshsieh.pixivj.model.SearchedIllustsFilter;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
-import com.github.hanshsieh.pixivj.http.Header;
 import com.github.hanshsieh.pixivj.util.IoUtils;
 import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStream;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.apache.commons.lang3.Validate;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -170,6 +173,36 @@ public class PixivApiClient implements Closeable {
         .get()
         .build();
     return requestSender.send(request, IllustDetail.class);
+  }
+
+  /**
+   * Get comments of an illustration. The illustration can be a normal illustration or a manga.
+   *
+   * @param filter The filter to use.
+   * @return Comments.
+   * @throws PixivException PixivException Error
+   * @throws IOException    IOException Error
+   */
+  @NonNull
+  public Comments getIllustComments(@NonNull IllustCommentsFilter filter)
+      throws PixivException, IOException {
+    return sendGetRequest("v1/illust/comments", filter, Comments.class);
+  }
+
+  @NonNull
+  public AddBookmarkResult addBookmark(@NonNull AddBookmark bookmark) throws PixivException, IOException {
+    HttpUrl url = baseUrl.newBuilder()
+        .addEncodedPathSegments("v2/illust/bookmark/add")
+        .build();
+    RequestBody formBody = new FormBody.Builder()
+        .add("illust_id", String.valueOf(bookmark.getIllustId()))
+        .add("restrict", bookmark.getRestrict().string())
+        .build();
+    Request request = createApiReqBuilder()
+        .url(url)
+        .post(formBody)
+        .build();
+    return requestSender.send(request, AddBookmarkResult.class);
   }
 
   /**

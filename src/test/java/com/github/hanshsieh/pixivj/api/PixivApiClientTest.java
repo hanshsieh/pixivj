@@ -7,13 +7,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.hanshsieh.pixivj.exception.APIException;
 import com.github.hanshsieh.pixivj.exception.PixivException;
+import com.github.hanshsieh.pixivj.model.AddBookmark;
+import com.github.hanshsieh.pixivj.model.AddBookmarkResult;
+import com.github.hanshsieh.pixivj.model.Comments;
 import com.github.hanshsieh.pixivj.model.FilterMode;
 import com.github.hanshsieh.pixivj.model.FilterType;
+import com.github.hanshsieh.pixivj.model.IllustCommentsFilter;
 import com.github.hanshsieh.pixivj.model.IllustDetail;
 import com.github.hanshsieh.pixivj.model.RankedIllusts;
 import com.github.hanshsieh.pixivj.model.RankedIllustsFilter;
 import com.github.hanshsieh.pixivj.model.RecommendedIllusts;
 import com.github.hanshsieh.pixivj.model.RecommendedIllustsFilter;
+import com.github.hanshsieh.pixivj.model.Restrict;
 import com.github.hanshsieh.pixivj.model.SearchedIllusts;
 import com.github.hanshsieh.pixivj.model.SearchedIllustsFilter;
 import com.github.hanshsieh.pixivj.token.TokenProvider;
@@ -21,6 +26,7 @@ import java.lang.reflect.Executable;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -28,6 +34,7 @@ import mockit.Verifications;
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,6 +43,10 @@ import okhttp3.ResponseBody;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class PixivApiClientTest {
   @Injectable
@@ -256,6 +267,102 @@ public class PixivApiClientTest {
       assertEquals("test user message", ex.getError().getError().getUserMessage());
       assertEquals("test message", ex.getError().getError().getMessage());
     }
+  }
+
+  @ParameterizedTest
+  @DisplayName("Add bookmark")
+  @MethodSource("testAddBookmark")
+  public void testAddBookmark(Restrict restrict, String wantRestrict) throws Exception {
+    new Expectations() {{
+      responseBody.string();
+      result = "{}";
+    }};
+    AddBookmark bookmark = new AddBookmark();
+    bookmark.setIllustId(123456L);
+    bookmark.setRestrict(restrict);
+    AddBookmarkResult result = client.addBookmark(bookmark);
+    assertNotNull(result);
+    new Verifications() {{
+      Request request;
+      httpClient.newCall(request = withCapture());
+      assertEquals("POST", request.method());
+      assertEquals(HttpUrl.parse("http://pixiv.example.com/v2/illust/bookmark/add"),
+          request.url());
+      assertEquals("test user agent", request.header("User-Agent"));
+      assertEquals("Bearer test access token", request.header("Authorization"));
+      FormBody reqBody = (FormBody) request.body();
+      assertEquals(2, reqBody.size());
+      assertEquals("illust_id", reqBody.name(0));
+      assertEquals("123456", reqBody.value(0));
+      assertEquals("restrict", reqBody.name(1));
+      assertEquals(wantRestrict, reqBody.value(1));
+    }};
+  }
+
+  private static Stream<Arguments> testAddBookmark() {
+    return Stream.of(
+        Arguments.of(Restrict.PUBLIC, "public"),
+        Arguments.of(Restrict.PRIVATE, "private")
+    );
+  }
+
+  @Test
+  @DisplayName("Get illustration comments")
+  public void testGetIllustComments() throws Exception {
+    new Expectations() {{
+      responseBody.string();
+      result = "{\n"
+          + "  \"comments\": [\n"
+          + "    {\n"
+          + "      \"id\": 118694387,\n"
+          + "      \"comment\": \"このご家族好き過ぎる\",\n"
+          + "      \"date\": \"2021-05-23T16:21:41+09:00\",\n"
+          + "      \"user\": {\n"
+          + "        \"id\": 12431836,\n"
+          + "        \"name\": \"米原なごや\",\n"
+          + "        \"account\": \"ma-ibara\",\n"
+          + "        \"profile_image_urls\": {\n"
+          + "          \"medium\": \"https://s.pximg.net/common/images/no_profile.png\"\n"
+          + "        }\n"
+          + "      },\n"
+          + "      \"has_replies\": false\n"
+          + "    },\n"
+          + "    {\n"
+          + "      \"id\": 118693352,\n"
+          + "      \"comment\": \"(love2)\",\n"
+          + "      \"date\": \"2021-05-23T15:58:52+09:00\",\n"
+          + "      \"user\": {\n"
+          + "        \"id\": 4904879,\n"
+          + "        \"name\": \"猫澤千羅\",\n"
+          + "        \"account\": \"ramu0084\",\n"
+          + "        \"profile_image_urls\": {\n"
+          + "          \"medium\": \"https://i.pximg.net/user-profile/img/2020/05/29/22/53/18/18730254_3456c2ceb701992170848beeb7f1992f_170.jpg\"\n"
+          + "        }\n"
+          + "      },\n"
+          + "      \"has_replies\": false\n"
+          + "    }\n"
+          + "  ],\n"
+          + "  \"next_url\": \"https://app-api.pixiv.net/v2/illust/comments?illust_id=90000399&last_comment_id=118642853\"\n"
+          + "}";
+    }};
+    IllustCommentsFilter filter = new IllustCommentsFilter();
+    filter.setIllustId(123456L);
+    filter.setLastCommentId(23456789L);
+    Comments comments = client.getIllustComments(filter);
+    new Verifications() {{
+      Request request;
+      httpClient.newCall(request = withCapture());
+      assertEquals("GET", request.method());
+      assertEquals(HttpUrl.parse("http://pixiv.example.com/v1/illust/comments?"
+              + "illust_id=123456&last_comment_id=23456789"),
+          request.url());
+      assertEquals("test user agent", request.header("User-Agent"));
+      assertEquals("Bearer test access token", request.header("Authorization"));
+    }};
+    assertEquals(2, comments.getComments().size());
+    assertEquals(118694387L, comments.getComments().get(0).getId());
+    assertEquals("このご家族好き過ぎる", comments.getComments().get(0).getComment());
+    assertEquals("https://app-api.pixiv.net/v2/illust/comments?illust_id=90000399&last_comment_id=118642853", comments.getNextUrl());
   }
 
   @Test
