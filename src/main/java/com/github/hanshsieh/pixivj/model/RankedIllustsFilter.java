@@ -1,7 +1,11 @@
 package com.github.hanshsieh.pixivj.model;
 
+import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import com.google.gson.annotations.SerializedName;
 import java.time.LocalDate;
+import java.util.Objects;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class RankedIllustsFilter {
 
@@ -44,5 +48,31 @@ public class RankedIllustsFilter {
 
   public void setOffset(Integer offset) {
     this.offset = offset;
+  }
+
+  @NonNull
+  public static RankedIllustsFilter fromUrl(@NonNull String url) throws IllegalArgumentException {
+    return new QueryParamConverter()
+        .fromQueryParams(url, RankedIllustsFilter.class);
+  }
+
+  @Override
+  public boolean equals(@Nullable Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    RankedIllustsFilter that = (RankedIllustsFilter) o;
+    return filter == that.filter &&
+        mode == that.mode &&
+        Objects.equals(date, that.date) &&
+        Objects.equals(offset, that.offset);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(filter, mode, date, offset);
   }
 }
