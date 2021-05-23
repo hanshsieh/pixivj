@@ -1,6 +1,9 @@
 package com.github.hanshsieh.pixivj.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.hanshsieh.pixivj.exception.APIException;
 import com.github.hanshsieh.pixivj.exception.PixivException;
@@ -17,6 +20,7 @@ import com.github.hanshsieh.pixivj.token.TokenProvider;
 import java.lang.reflect.Executable;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
+import java.util.regex.Pattern;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -247,10 +251,59 @@ public class PixivApiClientTest {
     }};
     try {
       client.getIllustDetail(100);
-      throw new Exception("Expecting exception");
+      throw new AssertionError("Expecting exception");
     } catch (APIException ex) {
       assertEquals("test user message", ex.getError().getError().getUserMessage());
       assertEquals("test message", ex.getError().getError().getMessage());
+    }
+  }
+
+  @Test
+  @DisplayName("Download from an image URL")
+  public void testDownload() throws Exception {
+    new Expectations() {{
+      response.isSuccessful();
+      result = true;
+    }};
+    String url = "https://i.pximg.net/c/600x1200_90_webp/img-master/img/2021/05/21/00/47/53/89979147_p0_master1200.jpg";
+    try(Response resp = client.download(url)) {
+      assertNotNull(resp);
+      new Verifications() {{
+        response.close();
+        times = 0;
+
+        Request request;
+        httpClient.newCall(request = withCapture());
+        assertEquals("GET", request.method());
+        assertEquals(HttpUrl.parse(url),
+            request.url());
+        assertEquals("test user agent", request.header("User-Agent"));
+        assertEquals("http://pixiv.example.com/", request.header("Referer"));
+        assertNull(request.header("Authorization"));
+      }};
+    }
+  }
+
+  @Test
+  @DisplayName("Download from an image URL and get 500")
+  public void testDownloadAnd500() throws Exception {
+    new Expectations() {{
+      response.isSuccessful();
+      result = false;
+
+      response.code();
+      result = 500;
+    }};
+    String url = "https://i.pximg.net/c/600x1200_90_webp/img-master/img/2021/05/21/00/47/53/89979147_p0_master1200.jpg";
+    try {
+      client.download(url);
+      throw new AssertionError("Expecting exception");
+    } catch (PixivException ex) {
+      assertTrue(Pattern.compile(".*500.*").matcher(ex.getMessage()).matches());
+      new Verifications() {{
+        response.close();
+        times = 1;
+      }};
     }
   }
 }

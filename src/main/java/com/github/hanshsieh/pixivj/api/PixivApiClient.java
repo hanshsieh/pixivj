@@ -1,5 +1,6 @@
 package com.github.hanshsieh.pixivj.api;
 
+import com.github.hanshsieh.pixivj.exception.APIException;
 import com.github.hanshsieh.pixivj.exception.AuthException;
 import com.github.hanshsieh.pixivj.exception.PixivException;
 import com.github.hanshsieh.pixivj.model.IllustDetail;
@@ -15,9 +16,12 @@ import com.github.hanshsieh.pixivj.util.IoUtils;
 import com.github.hanshsieh.pixivj.util.QueryParamConverter;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.apache.commons.lang3.Validate;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -166,6 +170,32 @@ public class PixivApiClient implements Closeable {
         .get()
         .build();
     return requestSender.send(request, IllustDetail.class);
+  }
+
+  /**
+   * Fetches the content of the given URL as stream.
+   * It is often used for downloading the image of an illustration.
+   * It is caller's responsibility to close the returned response object.
+   * If the status code is not within the range [200, 300), {@link PixivException} is thrown.
+   * @param url - URL.
+   * @return Response of downloading the resource.
+   */
+  @NonNull
+  public Response download(@NonNull String url) throws PixivException, IOException {
+    Request request = new Request.Builder()
+        .header("User-Agent", userAgent)
+        .header("Referer", baseUrl.toString())
+        .header("Accept-Encoding", "gzip")
+        .url(url)
+        .get()
+        .build();
+    Response response = httpClient.newCall(request).execute();
+    if (!response.isSuccessful()) {
+      int code = response.code();
+      response.close();
+      throw new PixivException("Fail to download. Status code: " + code);
+    }
+    return response;
   }
 
   /**
