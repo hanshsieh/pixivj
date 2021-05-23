@@ -353,7 +353,7 @@ public class PixivApiClientTest {
       Request request;
       httpClient.newCall(request = withCapture());
       assertEquals("GET", request.method());
-      assertEquals(HttpUrl.parse("http://pixiv.example.com/v1/illust/comments?"
+      assertEquals(HttpUrl.parse("http://pixiv.example.com/v2/illust/comments?"
               + "illust_id=123456&last_comment_id=23456789"),
           request.url());
       assertEquals("test user agent", request.header("User-Agent"));
