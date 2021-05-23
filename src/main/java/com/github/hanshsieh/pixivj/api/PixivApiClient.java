@@ -186,7 +186,7 @@ public class PixivApiClient implements Closeable {
   @NonNull
   public Comments getIllustComments(@NonNull IllustCommentsFilter filter)
       throws PixivException, IOException {
-    return sendGetRequest("v1/illust/comments", filter, Comments.class);
+    return sendGetRequest("v2/illust/comments", filter, Comments.class);
   }
 
   @NonNull
