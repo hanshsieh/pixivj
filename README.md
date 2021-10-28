@@ -5,12 +5,27 @@ A java client for Pixiv.
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.hanshsieh/pixivj.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.hanshsieh%22%20AND%20a:%22pixivj%22)  
 [Pixiv API doc](https://hanshsieh.github.io/pixiv-api-doc)
 
-Currently, only a small subset of the APIs are implemented.
+Currently, only a small subset of the APIs are implemented. If you want to use an API that isn't yet
+supported, please leave an issue or directly send a PR.
 
 # Usage
 ## Getting Started
 Add dependency to your project.  
-Checkout [here](https://mvnrepository.com/artifact/com.github.hanshsieh/pixivj).  
+```xml
+<dependency>
+  <groupId>com.github.hanshsieh</groupId>
+  <artifactId>pixivj</artifactId>
+  <version>1.2.3</version>
+</dependency>
+<dependency>
+  <groupId>com.github.hanshsieh</groupId>
+  <artifactId>pixivjjfx</artifactId>
+  <version>0.1.4-beta</version>
+</dependency>
+```
+Checkout [pixivj](https://mvnrepository.com/artifact/com.github.hanshsieh/pixivj) and 
+[pixivjjfx](https://mvnrepository.com/artifact/com.github.hanshsieh/pixivjjfx) for latest available
+versions.    
 If you want to try out snapshot versions, see [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/hanshsieh/pixivj/) for the available versions.  
 You can allow your project to pull snapshot versions by adding the following profile to your `pom.xml` (for Maven)
 ```xml
@@ -107,8 +122,7 @@ required to access the Pixiv API. Here, `com.github.hanshsieh.pixivjjfx.token.We
 It displays a web view using JavaFX, lets the user login, and obtains an access
 token and a refresh token. The tokens are then fed into `com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher`,
 which automatically refreshes the access token using the refresh token in the background.  
-Notice that `WebViewTokenProvider` isn't provided in this artifact. To use it, checkout
-[pixivj-jfx](https://github.com/hanshsieh/pixivj-jfx).  
+Notice that `WebViewTokenProvider` is provided by another artifact [pixivjjfx](https://github.com/hanshsieh/pixivj-jfx).  
 
 > Since 2021/02/08, Pixiv no longer supports logging in with username/password by calling its
 > RESTful API. To login, user must login via its web interface.   
@@ -117,6 +131,11 @@ Then, you can compile your project with
 ```bash
 mvn package
 ```
+
+The example here depends on JavaFX. If you don't want to use JavaFX, and you are able to get an
+access token using another way, you can directly use `com.github.hanshsieh.pixivj.token.ThreadedTokenRefresher` 
+, and remove the dependency on JavaFX.
+
 ## Authentication
 Pixiv has two set of RESTful APIs.  
 One is under the URL `https://app-api.pixiv.net`. It's used, for example, getting illustrations.
